@@ -5,6 +5,7 @@ public class BenTestScript : BenColored {
 
     public static GameObject playerGO;
     public float suckingDistance = 1;
+    public float suckingPower = 10;
 	// Use this for initialization
 	void Start () {
         playerGO = gameObject;
@@ -24,9 +25,18 @@ public class BenTestScript : BenColored {
         if (Input.GetKeyDown(KeyCode.Y))
             ChangeColor(ObjectColor.Yellow);
 
+        float dist = 0;
+
         foreach (BenProjectile bp in BenProjectile.projectiles)
         {
-
+            if ()
+            dist = Vector3.Distance(bp.transform.position, transform.position);
+            if (dist < suckingDistance)
+            {
+                bp.velocity -= (bp.transform.position - transform.position).normalized * (suckingPower * ((suckingDistance/2)/dist));
+                if (bp.velocity.magnitude > bp.speed)
+                    bp.velocity = bp.velocity.normalized * bp.speed;
+            }
         }
 	}
 

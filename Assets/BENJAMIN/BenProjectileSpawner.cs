@@ -31,7 +31,7 @@ public class BenProjectileSpawner : BenColored {
             {
                 wait -= fireRate;
                 BenProjectile p = Instantiate(projectile);
-                p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f));
+                p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor);
             }
         }
         

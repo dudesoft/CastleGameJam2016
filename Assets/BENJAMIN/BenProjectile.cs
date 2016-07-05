@@ -10,13 +10,15 @@ public class BenProjectile : BenColored {
     public float speed = 1, lifeTime = 5;
     public bool followPlayer, bounce, followEnemy, canHitPlayer, canHitEnemy;
     public Vector3 direction;
+    public Vector3 velocity;
     float countdown;
 
     [HideInInspector]
     public bool disabled;
 
-	public void Init(Vector3 position, Vector3 direction, float timeOffset, float angle)
+	public void Init(Vector3 position, Vector3 direction, float timeOffset, float angle, ObjectColor color)
     {
+        objectColor = color;
         projectiles.Add(this);
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         countdown = lifeTime;
@@ -24,12 +26,12 @@ public class BenProjectile : BenColored {
         this.direction = direction;
 
         transform.position += direction.normalized * speed * timeOffset;
-        
+        velocity = direction.normalized * speed;
     }
 
     void Update()
     {
-        transform.position += direction.normalized * speed * Time.deltaTime;
+        transform.position += velocity * Time.deltaTime;
         countdown -= Time.deltaTime;
         if (countdown <= 0)
             this.Destroy();
@@ -44,7 +46,8 @@ public class BenProjectile : BenColored {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        //if (col.gameObject == BenTestScript.playerGO)
+        if (col.gameObject == BenTestScript.playerGO)
+            Destroy();
     }
 
 
