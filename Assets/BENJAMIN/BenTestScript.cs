@@ -9,6 +9,8 @@ public class BenTestScript : BenColored {
     public float suckingPower = 10;
     public float colliderDistance = 0.25f;
     List<BenProjectile> toDestroy = new List<BenProjectile>();
+    float _moveSpeed = 2;
+
 	// Use this for initialization
 	void Start () {
         playerGO = gameObject;
@@ -28,6 +30,15 @@ public class BenTestScript : BenColored {
         if (Input.GetKeyDown(KeyCode.Y))
             ChangeColor(ObjectColor.Yellow);
 
+        if (Input.GetKey(KeyCode.A))
+            transform.position += Vector3.left * _moveSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.D))
+            transform.position += Vector3.right * _moveSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.W))
+            transform.position += Vector3.up * _moveSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.S))
+            transform.position += Vector3.down * _moveSpeed * Time.deltaTime;
+
         float dist = 0;
         toDestroy.Clear();
         foreach (BenProjectile bp in BenProjectile.projectiles)
@@ -43,7 +54,7 @@ public class BenTestScript : BenColored {
                 {
                     bp.velocity -= (bp.transform.position - transform.position).normalized * (suckingPower * ((suckingDistance / 2) / dist));
                     if (bp.velocity.magnitude > bp.speed)
-                        bp.velocity = bp.velocity.normalized * bp.speed;
+                        bp.velocity = bp.velocity.normalized * bp.speed * 1.2f;
                 }
             }
         }
