@@ -3,9 +3,11 @@ using System.Collections;
 
 public class BenTestScript : BenColored {
 
+    public static GameObject playerGO;
+    public float suckingDistance = 1;
 	// Use this for initialization
 	void Start () {
-	    
+        playerGO = gameObject;
 	}
 	
 	// Update is called once per frame
@@ -21,6 +23,11 @@ public class BenTestScript : BenColored {
 
         if (Input.GetKeyDown(KeyCode.Y))
             ChangeColor(ObjectColor.Yellow);
+
+        foreach (BenProjectile bp in BenProjectile.projectiles)
+        {
+
+        }
 	}
 
     void ChangeColor(ObjectColor color)
