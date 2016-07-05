@@ -37,7 +37,7 @@ public class BenProjectile : BenColored {
             this.Destroy();
     }
 
-    void Destroy()
+    public void Destroy()
     {
         projectiles.Remove(this);
         Destroy(gameObject);
