@@ -31,7 +31,7 @@ public class FreBaseEnemy : BenColored {
 		}
 	}
 
-	void Destroy()
+	void DestroyEnemy()
 	{
 		Destroy(gameObject);
 	}

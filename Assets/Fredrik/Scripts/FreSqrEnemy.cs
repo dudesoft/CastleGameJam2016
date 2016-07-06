@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FreSqrEnemy : MonoBehaviour {
+public class FreSqrEnemy : FreBaseEnemy {
 
 	public GameObject target;
 	public float timeBetweenJumps;
