@@ -9,12 +9,13 @@ public class BenProjectileSpawner : BenColored {
     public float fireDistance = 0.25f;
     bool fireing = false;
     public float spread = 1f;
+    public int poolSize = 10;
 
-    public bool isPLayer = false;
+    public bool isPlayer = false;
     public ParticleSystem muzzle;
     public ParticleSystem bulletImpact;
 
-    public InAudioNode bulletImpactAudio, shootAudio;
+    //public InAudioNode bulletImpactAudio, shootAudio;
 
     public Pool pool;
     [HideInInspector]
@@ -25,7 +26,7 @@ public class BenProjectileSpawner : BenColored {
 	void Start () {
         player = GetComponent<FrePlayerMovement>();
         rigid = GetComponent<Rigidbody2D>();
-        pool.Initialize(projectile.gameObject, 100, 10f);
+        pool.Initialize(projectile.gameObject, poolSize, 10f);
 	}
 	
 	// Update is called once per frame
@@ -38,7 +39,7 @@ public class BenProjectileSpawner : BenColored {
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
 
-        if (fireing)
+        if (fireing && BenShip.instance.canFire)
         {
             while (wait >= fireRate)
             {
@@ -48,13 +49,14 @@ public class BenProjectileSpawner : BenColored {
                 p.canHitEnemy = true;
                 p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor, this);
                 p.gameObject.SetActive(true);
-                InAudio.Play(gameObject, shootAudio);
+                //InAudio.Play(gameObject, shootAudio);
+                muzzle.Emit(5);
             }
         }
         
         wait += Time.deltaTime;
 
-        if (!fireing)
+        if (!fireing || !BenShip.instance.canFire)
         {
             wait = Mathf.Clamp(wait, 0, fireRate);
         }
