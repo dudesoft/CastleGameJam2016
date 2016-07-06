@@ -18,7 +18,7 @@ public class FreBaseEnemy : BenColored {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void LateUpdate () {
 		UpdateColor();
 	}
 		
