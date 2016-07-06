@@ -10,9 +10,12 @@ public class BenProjectileSpawner : BenColored {
     bool fireing = false;
     public float spread = 1f;
 
+    public Pool pool;
+
 	// Use this for initialization
 	void Start () {
-        
+        pool = Camera.main.GetComponent<Pool>();
+        pool.Initialize(projectile.gameObject, 100, 10f);
 	}
 	
 	// Update is called once per frame
@@ -30,8 +33,9 @@ public class BenProjectileSpawner : BenColored {
             while (wait >= fireRate)
             {
                 wait -= fireRate;
-                BenProjectile p = Instantiate(projectile);
-                p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor);
+                BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
+                p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor, this);
+                p.gameObject.SetActive(true);
             }
         }
         

@@ -48,6 +48,7 @@ public class BenTestScript : BenColored {
                 dist = Vector3.Distance(bp.transform.position, transform.position);
                 if (dist < colliderDistance)
                 {
+                    //Player picked up a bullet
                     toDestroy.Add(bp);
                 }
                 else if (dist < suckingDistance)
