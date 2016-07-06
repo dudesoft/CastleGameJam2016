@@ -60,7 +60,7 @@ public class BenProjectile : BenColored {
         origin.bulletImpact.startColor = Color.Lerp(Color.white, BenColored.GetRGB(objectColor), 0.33f);
         origin.bulletImpact.transform.position = pos;
         origin.bulletImpact.Emit(3);
-        InAudio.PlayAtPosition(origin.gameObject, origin.bulletImpactAudio, pos);
+        //InAudio.PlayAtPosition(origin.gameObject, origin.bulletImpactAudio, pos);
         Destroy();
     }
 

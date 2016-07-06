@@ -15,7 +15,7 @@ public class BenProjectileSpawner : BenColored {
     public ParticleSystem muzzle;
     public ParticleSystem bulletImpact;
 
-    public InAudioNode bulletImpactAudio, shootAudio;
+    //public InAudioNode bulletImpactAudio, shootAudio;
 
     public Pool pool;
     [HideInInspector]
@@ -39,7 +39,7 @@ public class BenProjectileSpawner : BenColored {
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
 
-        if (fireing)
+        if (fireing && BenShip.instance.canFire)
         {
             while (wait >= fireRate)
             {
@@ -49,13 +49,14 @@ public class BenProjectileSpawner : BenColored {
                 p.canHitEnemy = true;
                 p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor, this);
                 p.gameObject.SetActive(true);
-                InAudio.Play(gameObject, shootAudio);
+                //InAudio.Play(gameObject, shootAudio);
+                muzzle.Emit(5);
             }
         }
         
         wait += Time.deltaTime;
 
-        if (!fireing)
+        if (!fireing || !BenShip.instance.canFire)
         {
             wait = Mathf.Clamp(wait, 0, fireRate);
         }
