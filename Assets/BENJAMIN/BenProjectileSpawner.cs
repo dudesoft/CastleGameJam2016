@@ -6,15 +6,21 @@ public class BenProjectileSpawner : BenColored {
     public BenProjectile projectile;
     public float fireRate = 0.1f;
     float wait = 0;
-    float fireDistance = 0.25f;
+    public float fireDistance = 0.25f;
     bool fireing = false;
     public float spread = 1f;
 
+    public bool isPLayer = false;
+    public ParticleSystem muzzle;
+    public ParticleSystem bulletImpact;
+
     public Pool pool;
+    [HideInInspector]
+    public Rigidbody2D rigid;
 
 	// Use this for initialization
 	void Start () {
-        pool = Camera.main.GetComponent<Pool>();
+        rigid = GetComponent<Rigidbody2D>();
         pool.Initialize(projectile.gameObject, 100, 10f);
 	}
 	
@@ -34,6 +40,8 @@ public class BenProjectileSpawner : BenColored {
             {
                 wait -= fireRate;
                 BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
+                p.canHitPlayer = false;
+                p.canHitEnemy = true;
                 p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor, this);
                 p.gameObject.SetActive(true);
             }

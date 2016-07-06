@@ -14,6 +14,15 @@ public class BenColored : MonoBehaviour {
             default: return Color.white;
         }
     }
+
+    public void ChangeColor(ObjectColor color)
+    {
+        if (objectColor != color)
+        {
+            objectColor = color;
+            gameObject.layer = LayerMask.NameToLayer(color.ToString());
+        }
+    }
 }
 
 public enum ObjectColor { Red, Green, Blue, Yellow, None };

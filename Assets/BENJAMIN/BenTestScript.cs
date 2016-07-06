@@ -43,7 +43,7 @@ public class BenTestScript : BenColored {
         toDestroy.Clear();
         foreach (BenProjectile bp in BenProjectile.projectiles)
         {
-            if (bp.objectColor == objectColor)
+            if (bp.objectColor == objectColor && bp.canHitPlayer)
             {
                 dist = Vector3.Distance(bp.transform.position, transform.position);
                 if (dist < colliderDistance)
@@ -64,13 +64,12 @@ public class BenTestScript : BenColored {
         
 	}
 
-    void ChangeColor(ObjectColor color)
+    public void ChangeColor(ObjectColor color)
     {
         if (objectColor != color)
         {
             GetComponent<Renderer>().material.color = BenColored.GetRGB(color);
-            objectColor = color;
-            gameObject.layer = LayerMask.NameToLayer(color.ToString());
+            base.ChangeColor(color);
         }
     }
 
