@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class BenShip : BenColored {
 
+    public Color shipRed, shipGreen, shipBlue, shipYellow;
+
     public static BenShip instance;
     public static GameObject playerGO;
     public float suckingDistance = 1;
@@ -31,6 +33,7 @@ public class BenShip : BenColored {
         currentGun = redGun;
         playerGO = gameObject;
         instance = this;
+        ChangeShipColor(ObjectColor.Red);
 	}
 	
 	// Update is called once per frame
@@ -85,8 +88,22 @@ public class BenShip : BenColored {
         }
     }
 
+    Color GetCoreColor(ObjectColor color)
+    {
+        switch (color)
+        {
+            case ObjectColor.Red: return shipRed;
+            case ObjectColor.Green: return shipGreen;
+            case ObjectColor.Blue: return shipBlue;
+            case ObjectColor.Yellow: return shipYellow;
+            default: return shipRed;
+        }
+    }
+
     public IEnumerator TransformToRed(ShipConfiguration ship)
     {
+        shipCore.GetComponent<Renderer>().material.SetColor("_EmissionColor", GetCoreColor(ship.colorMode));
+
         LeanTween.rotateLocal(shipCore, ship.shipCore.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
         LeanTween.rotateLocal(shipRWing, ship.shipRWing.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
         yield return new WaitForSeconds(0.1f);
