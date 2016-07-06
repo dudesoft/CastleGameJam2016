@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 #endif
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class SceneLoader : MonoBehaviour {
     //public int CurrentSceneIndex;
     public int NextSceneIndex;
@@ -13,7 +14,7 @@ public class SceneLoader : MonoBehaviour {
     public bool UseButton = false;
     public string ButtonName = "Submit";
 
-    public UnityEngine.UI.Image ProgressBar;
+    private SpriteRenderer progressBar;
 
     public float ProgressBarSpeed;
 
@@ -23,6 +24,7 @@ public class SceneLoader : MonoBehaviour {
 
     void Awake() {
         gameObject.tag = "SceneLoader";
+        progressBar = GetComponent<SpriteRenderer>();
     }
 
     void Update() {
@@ -38,6 +40,7 @@ public class SceneLoader : MonoBehaviour {
     public void LoadScene() {        
         StartCoroutine(LoadSceneAsync());
     }
+
     private IEnumerator LoadSceneAsync() {
         // Trigger load end event
         if(LoadStarted != null) {
@@ -46,25 +49,24 @@ public class SceneLoader : MonoBehaviour {
         AsyncOperation asyncOp = SceneManager.LoadSceneAsync(NextSceneIndex, LoadSceneMode.Single);
         // Wait to activate scene until transition animations are done
         asyncOp.allowSceneActivation = false;
-        // Progress animation
-        int count = 0;
-        RectTransform rect = ProgressBar.GetComponent<RectTransform>();
+        // Progress animation        
+        float screenHeight = Camera.main.orthographicSize * 2;
+        float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+        progressBar.transform.position = new Vector3(Camera.main.transform.position.x - screenWidth / 2.0f, Camera.main.transform.position.y, 0);
+        progressBar.transform.localScale = new Vector3(progressBar.transform.localScale.x, screenHeight, 1);
         float scale = 0;
-        while (scale < Screen.width) {
-            ++count;
+        while (scale < screenWidth) {
             if(asyncOp.progress < 0.9f) {
-                scale = Mathf.Min(Screen.width * asyncOp.progress, scale + ProgressBarSpeed * Time.deltaTime);
+                scale = Mathf.Min(screenWidth * asyncOp.progress, scale + ProgressBarSpeed * Time.deltaTime);
             } else {
                 scale = scale + ProgressBarSpeed * Time.deltaTime;
             }
-            
-            rect.sizeDelta = new Vector2(scale, 0);
-            
+            // Change size of progress bar
+            progressBar.transform.localScale = new Vector3(scale, progressBar.transform.localScale.y, 1);
             yield return null;
         }
         // Load end animation
-        //Debug.Log("Progress " + asyncOp.progress + " * " + Screen.width + " = " + Screen.width * asyncOp.progress);
-        //Debug.Log("Loading took " + count + " frames");
+
         // Allow scene activation
         asyncOp.allowSceneActivation = true;
         // Trigger load end event
@@ -85,7 +87,6 @@ public class SceneLoaderEditor : Editor {
         if (myScript.UseButton) {
             myScript.ButtonName = EditorGUILayout.TextField("Button Name", myScript.ButtonName);
         }
-        myScript.ProgressBar = (UnityEngine.UI.Image)EditorGUILayout.ObjectField("Progress Bar", myScript.ProgressBar, typeof(UnityEngine.UI.Image), true);
         myScript.ProgressBarSpeed = EditorGUILayout.FloatField("Progress Bar Speed", myScript.ProgressBarSpeed);
     }
 }
