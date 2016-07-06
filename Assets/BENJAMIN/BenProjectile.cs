@@ -12,12 +12,14 @@ public class BenProjectile : BenColored {
     public Vector3 direction;
     public Vector3 velocity;
     float countdown;
+    public BenProjectileSpawner origin;
 
     [HideInInspector]
     public bool disabled;
 
-	public void Init(Vector3 position, Vector3 direction, float timeOffset, float angle, ObjectColor color)
+	public void Init(Vector3 position, Vector3 direction, float timeOffset, float angle, ObjectColor color, BenProjectileSpawner origin)
     {
+        this.origin = origin;
         objectColor = color;
         projectiles.Add(this);
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -37,11 +39,11 @@ public class BenProjectile : BenColored {
             this.Destroy();
     }
 
-    void Destroy()
+    public void Destroy()
     {
         projectiles.Remove(this);
-        Destroy(gameObject);
-        
+        //Destroy(gameObject);
+        origin.pool.Release(gameObject);
     }
 
     void OnCollisionEnter2D(Collision2D col)
