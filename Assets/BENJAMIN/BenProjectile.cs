@@ -55,16 +55,28 @@ public class BenProjectile : BenColored {
         origin.pool.Release(gameObject);
     }
 
+    public void Impact(Vector3 pos)
+    {
+        origin.bulletImpact.transform.position = pos;
+        origin.bulletImpact.Emit(3);
+        InAudio.PlayAtPosition(origin.gameObject, origin.bulletImpactAudio, pos);
+        Destroy();
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject != origin.gameObject)
         {
-            origin.bulletImpact.transform.position = col.contacts[0].point;
-            origin.bulletImpact.Emit(3);
-            Destroy();
-            
+            Impact(col.contacts[0].point);
         }
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject != origin.gameObject)
+        {
+            Impact(transform.position);
+        }
+    }
 
 }

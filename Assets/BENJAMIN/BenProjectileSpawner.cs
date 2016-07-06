@@ -14,6 +14,8 @@ public class BenProjectileSpawner : BenColored {
     public ParticleSystem muzzle;
     public ParticleSystem bulletImpact;
 
+    public InAudioNode bulletImpactAudio, shootAudio;
+
     public Pool pool;
     [HideInInspector]
     public Rigidbody2D rigid;
@@ -44,6 +46,7 @@ public class BenProjectileSpawner : BenColored {
                 p.canHitEnemy = true;
                 p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor, this);
                 p.gameObject.SetActive(true);
+                InAudio.Play(gameObject, shootAudio);
             }
         }
         
