@@ -109,16 +109,15 @@ public class BenShip : BenColored {
         LeanTween.moveLocal(shipLRocket, ship.shipLRocket.localPosition, 0.2f);
         LeanTween.rotateLocal(shipLRocket, ship.shipLRocket.localEulerAngles, 0.8f);
 
-        
-
         yield return null;
+        canFire = true;
     }
 
     public void ChangeShipColor(ObjectColor color)
     {
         if (objectColor != color)
         {
-            //DoTransformation(color);
+            DoTransformation(color);
             if (currentGun != null)
                 currentGun.enabled = false;
             currentGun = GetGun(color);
