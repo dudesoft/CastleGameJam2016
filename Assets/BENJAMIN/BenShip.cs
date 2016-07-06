@@ -87,27 +87,27 @@ public class BenShip : BenColored {
 
     public IEnumerator TransformToRed(ShipConfiguration ship)
     {
-        LeanTween.rotateLocal(shipCore, ship.shipCore.localEulerAngles, 0.8f);
-        LeanTween.rotateLocal(shipRWing, ship.shipRWing.localEulerAngles, 0.8f);
+        LeanTween.rotateLocal(shipCore, ship.shipCore.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.rotateLocal(shipRWing, ship.shipRWing.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
         yield return new WaitForSeconds(0.1f);
 
-        LeanTween.moveLocal(shipCore, ship.shipCore.localPosition, 0.2f);
-        LeanTween.rotateLocal(shipCore, ship.shipCore.localEulerAngles, 0.8f);
-        LeanTween.moveLocal(shipRWing, ship.shipRWing.localPosition, 0.2f);
-        LeanTween.rotateLocal(shipLWing, ship.shipLWing.localEulerAngles, 0.8f);
+        LeanTween.moveLocal(shipCore, ship.shipCore.localPosition, 0.2f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.rotateLocal(shipCore, ship.shipCore.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.moveLocal(shipRWing, ship.shipRWing.localPosition, 0.2f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.rotateLocal(shipLWing, ship.shipLWing.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
 
         yield return new WaitForSeconds(0.1f);
-        LeanTween.moveLocal(shipLWing, ship.shipLWing.localPosition, 0.2f);
-        LeanTween.moveLocal(shipFront, ship.shipFront.localPosition, 0.2f);
-        LeanTween.rotateLocal(shipFront, ship.shipFront.localEulerAngles, 0.8f);
+        LeanTween.moveLocal(shipLWing, ship.shipLWing.localPosition, 0.2f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.moveLocal(shipFront, ship.shipFront.localPosition, 0.2f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.rotateLocal(shipFront, ship.shipFront.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
 
         yield return new WaitForSeconds(0.1f);
 
-        LeanTween.moveLocal(shipRRocket, ship.shipRRocket.localPosition, 0.2f);
-        LeanTween.rotateLocal(shipRRocket, ship.shipRRocket.localEulerAngles, 0.8f);
+        LeanTween.moveLocal(shipRRocket, ship.shipRRocket.localPosition, 0.2f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.rotateLocal(shipRRocket, ship.shipRRocket.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
 
-        LeanTween.moveLocal(shipLRocket, ship.shipLRocket.localPosition, 0.2f);
-        LeanTween.rotateLocal(shipLRocket, ship.shipLRocket.localEulerAngles, 0.8f);
+        LeanTween.moveLocal(shipLRocket, ship.shipLRocket.localPosition, 0.2f).setEase(LeanTweenType.easeInOutBack);
+        LeanTween.rotateLocal(shipLRocket, ship.shipLRocket.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
 
         yield return null;
         canFire = true;
