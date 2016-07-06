@@ -10,9 +10,15 @@ public class BenShip : BenColored {
     public float colliderDistance = 0.25f;
     List<BenProjectile> toDestroy = new List<BenProjectile>();
     float _moveSpeed = 2;
+    public ParticleSystem colorPulse;
+
+    public BenProjectileSpawner redGun, greenGun, blueGun, yellowGun;
+
+    public BenProjectileSpawner currentGun;
 
 	// Use this for initialization
 	void Start () {
+        currentGun = redGun;
         playerGO = gameObject;
 	}
 	
@@ -59,9 +65,31 @@ public class BenShip : BenColored {
     {
         if (objectColor != color)
         {
-            GetComponent<Renderer>().material.color = BenColored.GetRGB(color);
+            if (currentGun != null)
+                currentGun.enabled = false;
+            currentGun = GetGun(color);
+            if (currentGun != null)
+                currentGun.enabled = true;
+            Color c = BenColored.GetRGB(color);
+            GetComponent<Renderer>().material.color = c;
+            c = Color.Lerp(c, Color.white, 0.5f);
+            c.a = 0.66f;
+            colorPulse.startColor = c;
+            colorPulse.Emit(1);
             base.ChangeColor(color);
         }
+    }
+
+    public BenProjectileSpawner GetGun(ObjectColor color)
+    {
+        switch (color)
+        {
+            case ObjectColor.Red: return redGun;
+            case ObjectColor.Green: return greenGun;
+            case ObjectColor.Blue: return blueGun;
+            case ObjectColor.Yellow: return yellowGun;
+        }
+            return redGun;
     }
 
     void OnDrawGizmos()

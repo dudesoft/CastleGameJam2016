@@ -9,8 +9,9 @@ public class BenProjectileSpawner : BenColored {
     public float fireDistance = 0.25f;
     bool fireing = false;
     public float spread = 1f;
+    public int poolSize = 10;
 
-    public bool isPLayer = false;
+    public bool isPlayer = false;
     public ParticleSystem muzzle;
     public ParticleSystem bulletImpact;
 
@@ -25,7 +26,7 @@ public class BenProjectileSpawner : BenColored {
 	void Start () {
         player = GetComponent<FrePlayerMovement>();
         rigid = GetComponent<Rigidbody2D>();
-        pool.Initialize(projectile.gameObject, 100, 10f);
+        pool.Initialize(projectile.gameObject, poolSize, 10f);
 	}
 	
 	// Update is called once per frame
