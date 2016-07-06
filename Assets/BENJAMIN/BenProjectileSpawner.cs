@@ -19,9 +19,11 @@ public class BenProjectileSpawner : BenColored {
     public Pool pool;
     [HideInInspector]
     public Rigidbody2D rigid;
+    public FrePlayerMovement player;
 
 	// Use this for initialization
 	void Start () {
+        player = GetComponent<FrePlayerMovement>();
         rigid = GetComponent<Rigidbody2D>();
         pool.Initialize(projectile.gameObject, 100, 10f);
 	}
@@ -31,10 +33,10 @@ public class BenProjectileSpawner : BenColored {
 
         fireing = Input.GetMouseButton(0);
 
-        Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
+        //Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        float angle = Mathf.Atan2(player.lookDirection.y, player.lookDirection.x) * Mathf.Rad2Deg;
+        //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        
 
         if (fireing)
         {
