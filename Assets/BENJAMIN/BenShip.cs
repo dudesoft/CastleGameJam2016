@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BenTestScript : BenColored {
+public class BenShip : BenColored {
 
     public static GameObject playerGO;
     public float suckingDistance = 1;
@@ -19,25 +19,16 @@ public class BenTestScript : BenColored {
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(KeyCode.R))
-            ChangeColor(ObjectColor.Red);
+            ChangeShipColor(ObjectColor.Red);
 
         if (Input.GetKeyDown(KeyCode.G))
-            ChangeColor(ObjectColor.Green);
+            ChangeShipColor(ObjectColor.Green);
 
         if (Input.GetKeyDown(KeyCode.B))
-            ChangeColor(ObjectColor.Blue);
+            ChangeShipColor(ObjectColor.Blue);
 
         if (Input.GetKeyDown(KeyCode.Y))
-            ChangeColor(ObjectColor.Yellow);
-
-        if (Input.GetKey(KeyCode.A))
-            transform.position += Vector3.left * _moveSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.D))
-            transform.position += Vector3.right * _moveSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.W))
-            transform.position += Vector3.up * _moveSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S))
-            transform.position += Vector3.down * _moveSpeed * Time.deltaTime;
+            ChangeShipColor(ObjectColor.Yellow);
 
         float dist = 0;
         toDestroy.Clear();
@@ -64,7 +55,7 @@ public class BenTestScript : BenColored {
         
 	}
 
-    public void ChangeColor(ObjectColor color)
+    public void ChangeShipColor(ObjectColor color)
     {
         if (objectColor != color)
         {
