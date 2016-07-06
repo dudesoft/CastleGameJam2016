@@ -7,7 +7,7 @@ public class AndreasEnemy : FreBaseEnemy
     public float speed = 2;
     public int value = 100;
     public int life = 100;
-    public GameObject playerDummy;
+	public FrePlayerMovement playerDummy;
     private bool engaging = true;
 
     private Camera camera2d;
@@ -17,7 +17,7 @@ public class AndreasEnemy : FreBaseEnemy
     void Start()
     {
         camera2d = Camera.main;
-
+		playerDummy = FindObjectOfType<FrePlayerMovement>();
         targetLocation = GetNewTargetLocation();
     }
 
@@ -72,10 +72,6 @@ public class AndreasEnemy : FreBaseEnemy
         return target;
     }
 
-    public virtual void OnTriggerEnter2D(Collider2D col)
-    {
-        // handle collision somehow
-    }
 
     void TurnToTarget()
     {

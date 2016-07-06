@@ -33,7 +33,7 @@ public class BenProjectile : BenColored {
         countdown = lifeTime;
         transform.position = position;
         this.direction = direction;
-
+		 
         //transform.position += direction.normalized * speed * timeOffset;
         velocity = direction.normalized * speed + new Vector3(origin.rigid.velocity.x, origin.rigid.velocity.y, 0);
         rigid.velocity = velocity;
@@ -50,6 +50,7 @@ public class BenProjectile : BenColored {
 
     public void Destroy()
     {
+
         projectiles.Remove(this);
         //Destroy(gameObject);
         origin.pool.Release(gameObject);

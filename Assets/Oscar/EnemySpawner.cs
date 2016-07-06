@@ -14,7 +14,7 @@ using System.Collections.Generic;
 */
 public class EnemySpawner : MonoBehaviour {
     [SerializeField]
-    private List<AbstractEnemy> enemyPrefabs;
+    private List<FreBaseEnemy> enemyPrefabs;
 
     private Dictionary<System.Type, Pool> pools;
     [SerializeField]
@@ -97,7 +97,7 @@ public class EnemySpawner : MonoBehaviour {
         if (pools.TryGetValue(type, out p)) {
             // Get instance
             GameObject newEnemyObj = p.Get();
-            AbstractEnemy newEnemy = newEnemyObj.GetComponent<AbstractEnemy>();
+            FreBaseEnemy newEnemy = newEnemyObj.GetComponent<FreBaseEnemy>();
             // Subscribe to death event
             newEnemy.Died += HandleDeadEnemy;
             // Set position and enable
@@ -108,7 +108,7 @@ public class EnemySpawner : MonoBehaviour {
         }        
     }
 
-    void HandleDeadEnemy(AbstractEnemy enemy) {
+    void HandleDeadEnemy(FreBaseEnemy enemy) {
         // Unsubscribe from death event
         enemy.Died -= HandleDeadEnemy;
         // Find pool and release object
