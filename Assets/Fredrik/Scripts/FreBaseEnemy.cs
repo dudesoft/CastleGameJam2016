@@ -8,7 +8,6 @@ public class FreBaseEnemy : BenColored {
 	public int collisionDamage;
 	public int bulletDamage;
 	Color enemyColor;
-//	float alpha;
 	SpriteRenderer spr;
 	bool hitFlash;
 	// Use this for initialization
@@ -39,21 +38,8 @@ public class FreBaseEnemy : BenColored {
 
 	void UpdateColor()
 	{
-		switch(objectColor)
-		{
-		case ObjectColor.Blue:
-			enemyColor = Color.blue;
-			break;
-		case ObjectColor.Red:
-			enemyColor = Color.red;
-			break;
-		case ObjectColor.Green:
-			enemyColor = Color.green;
-			break;
-		case ObjectColor.Yellow:
-			enemyColor = Color.yellow;
-			break;
-		}
+		enemyColor = BenColored.GetRGB(objectColor);
+
 		if(hitFlash)
 			enemyColor.a =0.5f;
 
