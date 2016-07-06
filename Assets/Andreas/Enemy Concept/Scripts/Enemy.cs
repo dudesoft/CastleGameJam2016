@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : FreBaseEnemy
 {
     private Vector3 targetLocation;
 
@@ -30,10 +30,6 @@ public class Enemy : MonoBehaviour
             Move();
         }
 
-        if (life <= 0)
-        {
-            DestroyEnemy();
-        }
     }
 
     public virtual void Shoot()
@@ -66,12 +62,6 @@ public class Enemy : MonoBehaviour
         return RotateAroundPoint(playerDummy.transform.position, transform.position, Quaternion.Euler(0, 0, Random.Range(-80, 80)));
     }
 
-    public virtual void DestroyEnemy()
-    {
-        // handle destruction
-
-        Destroy(gameObject);
-    }
 
     public Vector2 GetNewTargetLocation()
     {
