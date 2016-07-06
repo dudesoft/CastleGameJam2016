@@ -6,6 +6,7 @@ public class Enemy : FreBaseEnemy
 
     public float speed = 2;
     public int value = 100;
+    public int life = 100;
     public GameObject playerDummy;
     private bool engaging = true;
 
