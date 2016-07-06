@@ -27,7 +27,7 @@ public class FreBaseEnemy : BenColored {
 		health -= damage;
 		if(health <= 0)
 		{
-			Destroy();
+			DestroyEnemy();
 		}
 	}
 
