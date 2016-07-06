@@ -89,7 +89,7 @@ public class FrePlayerMovement : MonoBehaviour {
 		moveVec.Normalize();
 		aimVec.Normalize();
 
-		print(aimVec);
+		//print(aimVec);
 
 		rigbod.velocity -= friction * rigbod.velocity *Time.deltaTime;
 		if(moveVec != Vector2.zero)

@@ -8,7 +8,7 @@ public class BenProjectileSpawner : BenColored {
     float wait = 0;
     public float fireDistance = 0.25f;
     public bool fireing = false;
-    public float randomSpread = 1f;
+    public float randomSpread = 0f;
     public int poolSize = 10;
 
     public int simultaneousProjectiles = 1;
@@ -48,21 +48,36 @@ public class BenProjectileSpawner : BenColored {
 
         if (fireing && BenShip.instance.canFire)
         {
+            Quaternion fromRot = transform.rotation;
             while (wait >= fireRate)
             {
                 wait -= fireRate;
+
+                float angleOffset = -spread/2;
+
+                if (simultaneousProjectiles <= 1)
+                    angleOffset = 0;
+
                 for (int i = 0; i < simultaneousProjectiles; i++)
                 {
                     BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
                     p.canHitPlayer = false;
                     p.canHitEnemy = true;
-                    float angleOffset = Mathf.InverseLerp(0, simultaneousProjectiles - 1, spread) * 2 -1;
-                    p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-randomSpread, randomSpread) * Random.Range(0, 1f), objectColor, this);
+
+                    transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
+
+                    p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angleOffset + angle + Random.Range(-randomSpread, randomSpread) * Random.Range(0, 1f), objectColor, this);
                     p.gameObject.SetActive(true);
+
+                    if (simultaneousProjectiles > 1)
+                        angleOffset += spread / (simultaneousProjectiles - 1);
+                    
                 }
                 //InAudio.Play(gameObject, shootAudio);
                 muzzle.Emit(5);
             }
+
+            transform.rotation = fromRot;
         }
         
         wait += Time.deltaTime;
