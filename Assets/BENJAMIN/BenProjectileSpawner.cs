@@ -8,8 +8,11 @@ public class BenProjectileSpawner : BenColored {
     float wait = 0;
     public float fireDistance = 0.25f;
     public bool fireing = false;
-    public float spread = 1f;
+    public float randomSpread = 1f;
     public int poolSize = 10;
+
+    public int simultaneousProjectiles = 1;
+    public float spread = 0; //how much do the simultaneous bulltes spread out - 360 means you fire bullets in a circle
 
     public bool isPlayer = false;
     public ParticleSystem muzzle;
@@ -48,11 +51,15 @@ public class BenProjectileSpawner : BenColored {
             while (wait >= fireRate)
             {
                 wait -= fireRate;
-                BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
-                p.canHitPlayer = false;
-                p.canHitEnemy = true;
-                p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-spread, spread) * Random.Range(0, 1f), objectColor, this);
-                p.gameObject.SetActive(true);
+                for (int i = 0; i < simultaneousProjectiles; i++)
+                {
+                    BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
+                    p.canHitPlayer = false;
+                    p.canHitEnemy = true;
+                    float angleOffset = Mathf.InverseLerp(0, simultaneousProjectiles - 1, spread) * 2 -1;
+                    p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angle + Random.Range(-randomSpread, randomSpread) * Random.Range(0, 1f), objectColor, this);
+                    p.gameObject.SetActive(true);
+                }
                 //InAudio.Play(gameObject, shootAudio);
                 muzzle.Emit(5);
             }

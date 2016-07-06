@@ -6,7 +6,7 @@ public class BenPlayerCamera : MonoBehaviour
     bool fixedTarget = false;
     public float lerpSpeed = 3;
     public float cameraSize = 5;
-
+    public static BenPlayerCamera instance;
 
     public FrePlayerMovement player;
     Camera camera;
@@ -19,14 +19,7 @@ public class BenPlayerCamera : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            ScreenShake(3f, 0.2f);
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            ScreenShake(5f, 0.2f);
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            ScreenShake(7f, 0.2f);
     }
 	
 	// Update is called once per frame
@@ -52,7 +45,7 @@ public class BenPlayerCamera : MonoBehaviour
 
     Vector3 shake = new Vector3();
 
-    void ScreenShake(float magnitude, float duration)
+    public void ScreenShake(float magnitude, float duration)
     {
         StartCoroutine(ShakeRoutine(magnitude, duration));
     }

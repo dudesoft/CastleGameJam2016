@@ -102,6 +102,7 @@ public class BenShip : BenColored {
 
     public IEnumerator TransformToRed(ShipConfiguration ship)
     {
+        GetComponent<PolygonCollider2D>().points = ship.GetComponent<PolygonCollider2D>().points;
         shipCore.GetComponent<Renderer>().material.SetColor("_EmissionColor", GetCoreColor(ship.colorMode));
 
         LeanTween.rotateLocal(shipCore, ship.shipCore.localEulerAngles, 0.8f).setEase(LeanTweenType.easeInOutBack);
@@ -167,5 +168,10 @@ public class BenShip : BenColored {
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, colliderDistance);
+    }
+
+    public void TakeDamage()
+    {
+
     }
 }
