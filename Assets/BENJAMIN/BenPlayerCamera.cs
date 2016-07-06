@@ -5,13 +5,16 @@ public class BenPlayerCamera : MonoBehaviour
 {
     bool fixedTarget = false;
     public float lerpSpeed = 3;
+    public float cameraSize = 5;
+
 
     public FrePlayerMovement player;
+    Camera camera;
 
 	// Use this for initialization
 	void Start () 
     {
-	    
+        camera = GetComponent<Camera>();
 	}
 
     void Update()
@@ -38,6 +41,8 @@ public class BenPlayerCamera : MonoBehaviour
         {
             transform.position = Vector3.Lerp(transform.position, PlayerTarget() + shake, Time.deltaTime * lerpSpeed);
         }
+        camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, cameraSize, Time.deltaTime * lerpSpeed);
+
 	}
 
     Vector3 PlayerTarget()
