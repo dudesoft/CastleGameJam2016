@@ -26,7 +26,8 @@ public class BenProjectileSpawner : BenColored {
 	void Start () {
         player = GetComponent<FrePlayerMovement>();
         rigid = GetComponent<Rigidbody2D>();
-        pool.Initialize(projectile.gameObject, poolSize, 10f);
+        pool = AutoPool.GetPool(projectile.gameObject, poolSize);
+        //pool.Initialize(projectile.gameObject, poolSize, 10f);
 	}
 
     public float angle;
