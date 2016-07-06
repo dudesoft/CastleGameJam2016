@@ -6,8 +6,8 @@ public class BenProjectile : BenColored {
 
 	// Use this for initialization
     public static List<BenProjectile> projectiles = new List<BenProjectile>();
-    
 
+    public int damage = 1;
     public float speed = 1, lifeTime = 5;
     public bool followPlayer, bounce, followEnemy, canHitPlayer, canHitEnemy;
     public Vector3 direction;
