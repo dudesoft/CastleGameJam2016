@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Enemy : FreBaseEnemy
+public class AndreasEnemy : FreBaseEnemy
 {
     private Vector3 targetLocation;
 
