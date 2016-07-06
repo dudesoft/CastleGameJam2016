@@ -65,6 +65,7 @@ public class FrePlayerMovement : MonoBehaviour {
 
 			if(deadZone < GetAnalogueMagnitude(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y))
 			{
+				
 				aimVec.x = state.ThumbSticks.Right.X;
 				aimVec.y = state.ThumbSticks.Right.Y;
 			}
@@ -88,14 +89,16 @@ public class FrePlayerMovement : MonoBehaviour {
 		moveVec.Normalize();
 		aimVec.Normalize();
 
+		print(aimVec);
+
 		rigbod.velocity -= friction * rigbod.velocity *Time.deltaTime;
 		if(moveVec != Vector2.zero)
 			rigbod.velocity += moveVec * acceleration *Time.deltaTime;
 
         if (aimVec != Vector2.zero)
         {
-            transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg),
-                Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg)));
+			transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg),
+				Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg)));
 
             lookDirection = aimVec;
             
