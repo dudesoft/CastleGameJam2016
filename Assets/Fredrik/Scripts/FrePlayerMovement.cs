@@ -52,7 +52,7 @@ public class FrePlayerMovement : MonoBehaviour {
 						playerIndexSet = true;
 					}
 				}
-			}
+			} 
 
 			prevState = state;
 			state = GamePad.GetState(playerIndex);
