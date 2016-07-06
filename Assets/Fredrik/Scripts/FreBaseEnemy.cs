@@ -7,6 +7,11 @@ public class FreBaseEnemy : BenColored {
 	public int health =50;
 	public int collisionDamage;
 	public int bulletDamage;
+
+	public delegate void EnemyDiedEventHandler(FreBaseEnemy enemy);
+	public event EnemyDiedEventHandler Died;
+
+
 	Color enemyColor;
 	SpriteRenderer spr;
 	bool hitFlash;
@@ -24,15 +29,18 @@ public class FreBaseEnemy : BenColored {
 		
 	void DealDamage(int damage)
 	{
+
 		health -= damage;
 		if(health <= 0)
 		{
-			DestroyEnemy();
+			EnemyDies();
 		}
 	}
 
-	void DestroyEnemy()
+	void EnemyDies()
 	{
+
+//		Died(this);
 		Destroy(gameObject);
 	}
 
@@ -47,14 +55,6 @@ public class FreBaseEnemy : BenColored {
 		spr.color = enemyColor;
 	}
 
-
-	void OnCollisionEnter2D(Collision2D col)
-	{
-		BenProjectile p = col.gameObject.GetComponent<BenProjectile>();
-
-		ProjectileHit(p);
-	}
-
 	void ProjectileHit(BenProjectile p)
 	{
 		if(p != null) 
@@ -66,6 +66,14 @@ public class FreBaseEnemy : BenColored {
 			}
 		}
 	}
+
+	void OnCollisionEnter2D(Collision2D col)
+	{
+		BenProjectile p = col.gameObject.GetComponent<BenProjectile>();
+
+		ProjectileHit(p);
+	}
+		
 
 	void OnTriggerEnter2D(Collider2D col)
 	{
