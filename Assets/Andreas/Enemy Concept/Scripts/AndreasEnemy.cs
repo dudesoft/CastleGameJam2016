@@ -122,8 +122,5 @@ public class Enemy : FreBaseEnemy
         speed = value;
     }
 
-    public void TakeDamage(int value)
-    {
-        life -= value;
-    }
+
 }
