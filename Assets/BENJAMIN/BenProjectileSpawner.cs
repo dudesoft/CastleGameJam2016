@@ -7,7 +7,7 @@ public class BenProjectileSpawner : BenColored {
     public float fireRate = 0.1f;
     float wait = 0;
     public float fireDistance = 0.25f;
-    bool fireing = false;
+    public bool fireing = false;
     public float spread = 1f;
     public int poolSize = 10;
 
@@ -28,14 +28,17 @@ public class BenProjectileSpawner : BenColored {
         rigid = GetComponent<Rigidbody2D>();
         pool.Initialize(projectile.gameObject, poolSize, 10f);
 	}
-	
+
+    public float angle;
+
 	// Update is called once per frame
 	void Update () {
 
-        fireing = Input.GetMouseButton(0);
+        if (player != null)
+            fireing = Input.GetMouseButton(0);
 
         //Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(player.lookDirection.y, player.lookDirection.x) * Mathf.Rad2Deg;
+        angle = Mathf.Atan2(player.lookDirection.y, player.lookDirection.x) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
 
