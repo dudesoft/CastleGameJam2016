@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Pool : MonoBehaviour {
-    private GameObject prefab;
+    public GameObject prefab;
     private float resizeCheckPeriod;
     private int referenceSize;
     private Stack<GameObject> pool;
