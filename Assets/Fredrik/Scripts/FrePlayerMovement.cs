@@ -21,6 +21,10 @@ public class FrePlayerMovement : MonoBehaviour {
 	GamePadState state;
 	GamePadState prevState;
 
+    public Vector3 lookDirection;
+    public float lookDistance = 0;
+    public float maxLookDistance = 10;
+
 	// Use this for initialization
 	void Start () {
 		rigbod = GetComponent<Rigidbody2D>();
@@ -53,17 +57,19 @@ public class FrePlayerMovement : MonoBehaviour {
 			prevState = state;
 			state = GamePad.GetState(playerIndex);
 
-			if(deadZone < Mathf.Abs( state.ThumbSticks.Left.X)+Mathf.Abs( state.ThumbSticks.Left.Y))
+			if(deadZone < GetAnalogueMagnitude(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y))
 			{
 				moveVec.x = state.ThumbSticks.Left.X;
 				moveVec.y = state.ThumbSticks.Left.Y;
 			}
 
-			if(deadZone < Mathf.Abs( state.ThumbSticks.Right.X)+Mathf.Abs( state.ThumbSticks.Right.Y))
+			if(deadZone < GetAnalogueMagnitude(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y))
 			{
 				aimVec.x = state.ThumbSticks.Right.X;
 				aimVec.y = state.ThumbSticks.Right.Y;
 			}
+            lookDistance = GetAnalogueMagnitude(aimVec.x, aimVec.y)*maxLookDistance;
+            
 
 			break;
 
@@ -74,6 +80,8 @@ public class FrePlayerMovement : MonoBehaviour {
 			Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			aimVec.x = mousePos.x-transform.position.x ;
 			aimVec.y = mousePos.y-transform.position.y ;
+            lookDistance = Mathf.Clamp(Vector3.Distance(transform.position, aimVec), 0, maxLookDistance);
+            lookDistance = ((lookDistance / maxLookDistance) * (lookDistance / maxLookDistance)) * maxLookDistance;
 			break;
 		}
 
@@ -84,9 +92,51 @@ public class FrePlayerMovement : MonoBehaviour {
 		if(moveVec != Vector2.zero)
 			rigbod.velocity += moveVec * acceleration *Time.deltaTime;
 
-		if(aimVec != Vector2.zero)
-			transform.localRotation = Quaternion.RotateTowards(transform.localRotation,Quaternion.Euler(0,0,Mathf.Atan2(aimVec.y,aimVec.x)*Mathf.Rad2Deg ),
-				Time.deltaTime *rotateSpeed*Quaternion.Angle(transform.localRotation,Quaternion.Euler(0,0,Mathf.Atan2(aimVec.y,aimVec.x)*Mathf.Rad2Deg )));
-		
+        if (aimVec != Vector2.zero)
+        {
+            transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg),
+                Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg)));
+
+            lookDirection = aimVec;
+            
+        }
+        else
+            lookDistance = 0;
 	}
+
+    /// <summary>
+    /// Gets the magnitude of an analogue stick.
+    /// </summary>
+    /// <returns>
+    /// The analogue magnitude. (0-1) But depending on the controller might be more.
+    /// </returns>
+    /// <param name='xAxis'>
+    /// Horizontal (X axis).
+    /// </param>
+    /// <param name='yAxis'>
+    /// Vertical (Y axis).
+    /// </param>
+    public static float GetAnalogueMagnitude(float xAxis, float yAxis)
+    {
+        return Mathf.Sqrt(xAxis * xAxis + yAxis * yAxis);
+    }
+
+    /// <summary>
+    /// Gets the magnitude of an analogue stick.
+    /// </summary>
+    /// <returns>
+    /// The analogue magnitude. (0-1) But depending on the controller might be more.
+    /// </returns>
+    /// <param name='xAxis'>
+    /// Horizontal (X axis).
+    /// </param>
+    /// <param name='yAxis'>
+    /// Vertical (Y axis).
+    /// </param>
+    public static float GetAnalogueMagnitude(string xAxis, string yAxis)
+    {
+        float horizontal = UnityEngine.Input.GetAxis(xAxis);
+        float vertical = UnityEngine.Input.GetAxis(yAxis);
+        return GetAnalogueMagnitude(horizontal, vertical);
+    }
 }
