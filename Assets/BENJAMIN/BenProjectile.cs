@@ -15,6 +15,7 @@ public class BenProjectile : BenColored {
     float countdown;
     public BenProjectileSpawner origin;
     public Rigidbody2D rigid;
+    public float dampen = 0;
 
     [HideInInspector]
     public bool disabled;
@@ -26,6 +27,7 @@ public class BenProjectile : BenColored {
 
 	public void Init(Vector3 position, Vector3 direction, float timeOffset, float angle, ObjectColor color, BenProjectileSpawner origin)
     {
+        rigid.drag = dampen;
         this.origin = origin;
         ChangeColor(color);
         projectiles.Add(this);
@@ -42,6 +44,9 @@ public class BenProjectile : BenColored {
     void Update()
     {
         //transform.position += velocity * Time.deltaTime;
+        if (dampen != 0)
+            velocity = velocity * (1-(dampen*Time.deltaTime));
+
         rigid.velocity = velocity;
         countdown -= Time.deltaTime;
         if (countdown <= 0)
