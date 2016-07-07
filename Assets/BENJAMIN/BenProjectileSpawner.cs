@@ -53,7 +53,7 @@ public class BenProjectileSpawner : BenColored {
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
 
-        if (fireing && (BenShip.instance.canFire && !isPlayer || isPlayer))
+        if (fireing && (BenShip.instance.canFire && isPlayer || !isPlayer))
         {
             Quaternion fromRot = transform.rotation;
             while (wait >= fireRate)
@@ -68,8 +68,6 @@ public class BenProjectileSpawner : BenColored {
                 for (int i = 0; i < simultaneousProjectiles; i++)
                 {
                     BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
-                    p.canHitPlayer = false;
-                    p.canHitEnemy = true;
 
                     transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
 
