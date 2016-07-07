@@ -40,8 +40,7 @@ public class FreBaseEnemy : BenColored {
 	void EnemyDies()
 	{
 
-//		Died(this);
-		Destroy(gameObject);
+		Died(this);
 	}
 
 	void UpdateColor()

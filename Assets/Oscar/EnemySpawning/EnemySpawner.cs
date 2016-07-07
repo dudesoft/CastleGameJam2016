@@ -64,6 +64,7 @@ public class EnemySpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Testing
+
 	    if(Input.GetKeyDown(KeyCode.Space)) {
             switch (Pattern) {
                 case SpawnPattern.Point:
