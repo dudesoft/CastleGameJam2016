@@ -11,7 +11,8 @@ public class FreSqrEnemy : FreBaseEnemy {
 	public float speed;
 	Vector2 goalPos;
 	// Use this for initialization
-	void Start () {
+	protected override void Init()
+	{
 		goalPos =transform.position;
 	}
 	
