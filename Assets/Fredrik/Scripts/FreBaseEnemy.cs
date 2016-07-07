@@ -41,7 +41,7 @@ public class FreBaseEnemy : BenColored {
 		UpdateColor();
 	}
 		
-	void DealDamage(int damage)
+	public void DealDamage(int damage)
 	{
 
 		curentHealth -= damage;
@@ -68,30 +68,4 @@ public class FreBaseEnemy : BenColored {
 		spr.color = enemyColor;
 	}
 
-	void ProjectileHit(BenProjectile p)
-	{
-		if(p != null) 
-		{
-			if(p.objectColor != objectColor && p.canHitEnemy)
-			{
-				DealDamage(p.damage);
-				hitFlash = true;
-			}
-		}
-	}
-
-	void OnCollisionEnter2D(Collision2D col)
-	{
-		BenProjectile p = col.gameObject.GetComponent<BenProjectile>();
-
-		ProjectileHit(p);
-	}
-		
-
-	void OnTriggerEnter2D(Collider2D col)
-	{
-		BenProjectile p = col.gameObject.GetComponent<BenProjectile>();
-		ProjectileHit(p);
-		
-	}
 }
