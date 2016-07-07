@@ -72,6 +72,8 @@ public class SceneLoader : MonoBehaviour {
         // Allow scene activation
         asyncOp.allowSceneActivation = true;
         yield return null;
+        // Disable camera
+        originCam.gameObject.SetActive(false);
         // Adjust progress bar to new camera
         Camera destCam = Camera.main;
         screenHeight = destCam.orthographicSize * 2;
