@@ -33,11 +33,17 @@ public class AmmoRing : MonoBehaviour {
 
     public void ChangeWeapon(BenProjectileSpawner weapon)
     {
-        LeanTween.cancel(gameObject, true);
-        
+        StartCoroutine(ChangeWeaponRoutine(weapon));
+    }
+
+    IEnumerator ChangeWeaponRoutine(BenProjectileSpawner weapon)
+    {
+        LeanTween.cancel(gameObject, false);
+
+        yield return null;
+
         scaleParent.localScale = Vector3.zero;
         LeanTween.scale(scaleParent.gameObject, Vector3.one, 0.4f).setEase(LeanTweenType.easeInOutBack).setDelay(0.2f);
-
 
 
         Color c = BenColored.GetRGB(weapon.objectColor);

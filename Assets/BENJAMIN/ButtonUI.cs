@@ -13,12 +13,13 @@ public class ButtonUI : MonoBehaviour {
 
 	public void UpdateWeapon()
     {
+        UpdateAmmo();
 
     }
 
     public void UpdateAmmo()
     {
-
+        GetBar(BenShip.instance.currentGun.objectColor).fillAmount = (BenShip.instance.GetCurrentAmmoCount() / (float)BenShip.instance.GetCurrentMaxAmmo()) / 2;
     }
 
     Image GetButton(ObjectColor color)
@@ -37,10 +38,10 @@ public class ButtonUI : MonoBehaviour {
     {
         switch (color)
         {
-            case ObjectColor.Red: return red;
-            case ObjectColor.Green: return green;
-            case ObjectColor.Blue: return blue;
-            case ObjectColor.Yellow: return yellow;
+            case ObjectColor.Red: return redBar;
+            case ObjectColor.Green: return greenBar;
+            case ObjectColor.Blue: return blueBar;
+            case ObjectColor.Yellow: return yellowBar;
         }
         return red;
     }
