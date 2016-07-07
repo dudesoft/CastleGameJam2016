@@ -13,6 +13,7 @@ public class AmmoRing : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GetComponent<Image>();
+        Canvas.ForceUpdateCanvases();
 	}
 	
 	// Update is called once per frame
