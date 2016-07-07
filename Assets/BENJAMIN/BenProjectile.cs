@@ -77,10 +77,24 @@ public class BenProjectile : BenColored {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject != origin.gameObject)
+        if (col.gameObject == origin.gameObject)
+            return;
+
+        if (col.gameObject.CompareTag("Enemy") && canHitEnemy)
         {
             Impact(transform.position);
         }
+
+        if (col.gameObject.CompareTag("Player"))
+        {
+            Impact(transform.position);
+        }
+
+        if (!col.isTrigger)
+        {
+            Impact(transform.position);
+        }
+        
     }
 
 }
