@@ -79,7 +79,8 @@ public class BenProjectileSpawner : BenColored {
                     
                 }
                 //InAudio.Play(gameObject, shootAudio);
-                muzzle.Emit(5);
+                if (muzzle)
+                    muzzle.Emit(5);
             }
 
             transform.rotation = fromRot;
