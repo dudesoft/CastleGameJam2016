@@ -37,8 +37,8 @@ public class SpawnArea: MonoBehaviour {
         spawner = GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawner>();
     }
 
-    void OnTriggerEnter2D(Collision2D col) {
-        if(!used && col.collider.tag == "Player") {
+    void OnTriggerEnter2D(Collider2D col) {
+        if(!used && col.tag == "Player") {
             switch (Pattern) {
                 case SpawnPattern.Point:
                     StartCoroutine(spawner.PointSpawner(Position, EnemyAmount, Period, EnemyPrefabIndex));
