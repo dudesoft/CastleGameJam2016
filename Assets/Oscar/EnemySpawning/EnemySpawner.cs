@@ -88,12 +88,12 @@ public class EnemySpawner : MonoBehaviour {
         //}
 	}
 
-    protected void Spawn(int prefabIndex, Vector3 position) {
+    protected void Spawn(int prefabIndex, Vector3 position, ObjectColor color) {
         System.Type type = enemyPrefabs[prefabIndex].GetType();
-        Spawn(type, position);
+        Spawn(type, position, color);
     }
 
-    protected void Spawn(System.Type type, Vector3 position) {
+    protected void Spawn(System.Type type, Vector3 position, ObjectColor color) {
         Pool p;
         if (pools.TryGetValue(type, out p)) {
             // Get instance
@@ -103,6 +103,7 @@ public class EnemySpawner : MonoBehaviour {
             newEnemy.Died += HandleDeadEnemy;
             // Set position and enable
             newEnemy.transform.position = position;
+            newEnemy.ChangeColor(color);
             newEnemyObj.SetActive(true);
         } else {
             Debug.LogWarning("There is no pool for " + type);
@@ -125,10 +126,10 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns amount enemies at point with a period delay between them.
     /// </summary>
-    public IEnumerator PointSpawner(Vector3 point, int amount, float period, int prefabIndex) {
+    public IEnumerator PointSpawner(Vector3 point, int amount, float period, int prefabIndex, ObjectColor color) {
         for(int i = 0; i < amount; ++i) {
             // Spawn
-            Spawn(prefabIndex, point);
+            Spawn(prefabIndex, point, color);
             if (period > 0) {
                 yield return new WaitForSeconds(period);
             }     
@@ -137,10 +138,10 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns amount enemies along the line defined by start and end with a period delay between them.
     /// </summary>
-    public IEnumerator LineSpawner(Vector3 start, Vector3 end, int amount, float period, int prefabIndex) {
+    public IEnumerator LineSpawner(Vector3 start, Vector3 end, int amount, float period, int prefabIndex, ObjectColor color) {
         for (int i = 0; i < amount; ++i) {
             // Spawn
-            Spawn(prefabIndex, Vector3.Lerp(start, end, (float)i / (float)amount));
+            Spawn(prefabIndex, Vector3.Lerp(start, end, (float)i / (float)amount), color);
             if (period > 0) {
                 yield return new WaitForSeconds(period);
             }
@@ -150,13 +151,13 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns amount anemies along the circle defined by center and radius with a period delay between them.
     /// </summary>
-    public IEnumerator CircleSpawner(Vector3 center, float radius, int amount, float period, int prefabIndex) {
+    public IEnumerator CircleSpawner(Vector3 center, float radius, int amount, float period, int prefabIndex, ObjectColor color) {
         float frac;
         float twoPi = 2 * Mathf.PI;
         for (int i = 0; i < amount; ++i) {
             // Spawn
             frac = ((float)i / (float)amount) * twoPi;
-            Spawn(prefabIndex, center + new Vector3(Mathf.Cos(frac), Mathf.Sin(frac), 0) * radius);
+            Spawn(prefabIndex, center + new Vector3(Mathf.Cos(frac), Mathf.Sin(frac), 0) * radius, color);
             if (period > 0) {
                 yield return new WaitForSeconds(period);
             }
@@ -166,7 +167,7 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns enemies in a triangle unit formation with a period delay between them.
     /// </summary>
-    public IEnumerator UnitSpawner(Vector3 tip, Vector3 dir, int rows, float spacing, float rowPeriod, int prefabIndex) {
+    public IEnumerator UnitSpawner(Vector3 tip, Vector3 dir, int rows, float spacing, float rowPeriod, int prefabIndex, ObjectColor color) {
         Vector3 nDir = dir.normalized;
         Vector3 orthoDir = new Vector3(nDir.y, -nDir.x, 0);
         int rowSize = -1;
@@ -177,7 +178,7 @@ public class EnemySpawner : MonoBehaviour {
             sideOffset = - Mathf.Floor(rowSize / 2.0f) * spacing;
             for (int n = 0; n < rowSize; ++n) {
                 // Spawn                
-                Spawn(prefabIndex, tip + sideOffset * orthoDir + frontOffset * nDir);
+                Spawn(prefabIndex, tip + sideOffset * orthoDir + frontOffset * nDir, color);
                 sideOffset += spacing;
             }
             if (rowPeriod > 0) {

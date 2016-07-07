@@ -9,26 +9,38 @@ public class SpawnArea: MonoBehaviour {
         Circle,
         Unit
     }
+    [Header("General")]
     public SpawnPattern Pattern;
 
     public int EnemyPrefabIndex;
+    public ObjectColor Color;
 
+    [Tooltip("Not used by Line pattern.")]
     public Vector3 Position;
+    [Tooltip("Not used by Unit pattern.")]
+    public int EnemyAmount;
+    [Tooltip("Unit pattern uses this on a row basis.")]
+    public float Period;
 
     // Line
+    [Header("Line")]
     public Vector3 LineStart;
     public Vector3 LineEnd;
 
-    public int EnemyAmount;
-    public float Period;
+
 
     // Circle
+    [Header("Circle")]
     public float Radius;
 
     // Unit
+    [Header("Unit")]
     public int Rows;
     public Vector3 ForwardDir;
     public float UnitSpacing;
+
+
+
 
     private bool used = false;
     private EnemySpawner spawner;
@@ -41,16 +53,16 @@ public class SpawnArea: MonoBehaviour {
         if(!used && col.tag == "Player") {
             switch (Pattern) {
                 case SpawnPattern.Point:
-                    StartCoroutine(spawner.PointSpawner(Position, EnemyAmount, Period, EnemyPrefabIndex));
+                    StartCoroutine(spawner.PointSpawner(Position, EnemyAmount, Period, EnemyPrefabIndex, Color));
                     break;
                 case SpawnPattern.Line:
-                    StartCoroutine(spawner.LineSpawner(LineStart, LineEnd, EnemyAmount, Period, EnemyPrefabIndex));
+                    StartCoroutine(spawner.LineSpawner(LineStart, LineEnd, EnemyAmount, Period, EnemyPrefabIndex, Color));
                     break;
                 case SpawnPattern.Circle:
-                    StartCoroutine(spawner.CircleSpawner(Position, Radius, EnemyAmount, Period, EnemyPrefabIndex));
+                    StartCoroutine(spawner.CircleSpawner(Position, Radius, EnemyAmount, Period, EnemyPrefabIndex, Color));
                     break;
                 case SpawnPattern.Unit:
-                    StartCoroutine(spawner.UnitSpawner(Position, ForwardDir, Rows, UnitSpacing, Period, EnemyPrefabIndex));
+                    StartCoroutine(spawner.UnitSpawner(Position, ForwardDir, Rows, UnitSpacing, Period, EnemyPrefabIndex, Color));
                     break;
             }
             used = true;
