@@ -20,14 +20,18 @@ public class BenProjectileSpawner : BenColored {
 
     //public InAudioNode bulletImpactAudio, shootAudio;
 
+    [HideInInspector]
     public Pool pool;
     [HideInInspector]
     public Rigidbody2D rigid;
+    [HideInInspector]
     public FrePlayerMovement player;
 
 	// Use this for initialization
 	void Start () {
-        player = GetComponent<FrePlayerMovement>();
+        if (isPlayer)
+            player = GetComponent<FrePlayerMovement>();
+
         rigid = GetComponent<Rigidbody2D>();
         pool = AutoPool.GetPool(projectile.gameObject, poolSize);
         //pool.Initialize(projectile.gameObject, poolSize, 10f);
@@ -42,11 +46,14 @@ public class BenProjectileSpawner : BenColored {
             fireing = Input.GetMouseButton(0);
 
         //Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        angle = Mathf.Atan2(player.lookDirection.y, player.lookDirection.x) * Mathf.Rad2Deg;
+        //if (isPlayer)
+        //    angle = Mathf.Atan2(player.lookDirection.y, player.lookDirection.x) * Mathf.Rad2Deg;
+        //else
+            angle = Mathf.Atan2(-transform.up.x, transform.up.y) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
 
-        if (fireing && BenShip.instance.canFire)
+        if (fireing && (BenShip.instance.canFire && isPlayer || !isPlayer))
         {
             Quaternion fromRot = transform.rotation;
             while (wait >= fireRate)
@@ -82,7 +89,7 @@ public class BenProjectileSpawner : BenColored {
         
         wait += Time.deltaTime;
 
-        if (!fireing || !BenShip.instance.canFire)
+        if (!fireing || (BenShip.instance.canFire && isPlayer))
         {
             wait = Mathf.Clamp(wait, 0, fireRate);
         }
