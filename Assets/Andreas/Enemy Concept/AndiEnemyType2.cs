@@ -37,7 +37,6 @@ public class AndiEnemyType2 : FreBaseEnemy
         return RotateAroundPoint(player.transform.position, transform.position, Quaternion.Euler(0, 0, Random.Range(-80, 80)));
     }
 
-
     private Vector3 RotateAroundPoint(Vector3 pivot, Vector3 point, Quaternion angle)
     {
         return (angle * (point - pivot) + pivot) + (pivot - point) * -Random.Range(3f, 5f);

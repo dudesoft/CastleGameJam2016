@@ -11,7 +11,7 @@ public class FreBaseEnemy : BenColored {
 	protected static FrePlayerMovement playerObject;
 	public delegate void EnemyDiedEventHandler(FreBaseEnemy enemy);
 	public event EnemyDiedEventHandler Died;
-
+	float scale;
 
 	Color enemyColor;
 	SpriteRenderer spr;
@@ -39,12 +39,16 @@ public class FreBaseEnemy : BenColored {
 	// Update is called once per frame
 	void LateUpdate () {
 		UpdateColor();
+		scale += Mathf.MoveTowards(scale,1, Time.deltaTime);
+		 
+	//	transform.localScale = scale * Vector3.one;
 	}
 		
 	public void DealDamage(int damage)
 	{
 		hitFlash=true;
 		curentHealth -= damage;
+		scale = 0.9f;
 		if(curentHealth <= 0)
 		{
 			EnemyDies();
@@ -59,7 +63,7 @@ public class FreBaseEnemy : BenColored {
 
 	void UpdateColor()
 	{
-		enemyColor = BenColored.GetRGB(objectColor);
+		enemyColor = Color.Lerp(enemyColor, BenColored.GetRGB(objectColor),Time.deltaTime*5);
 
 		if(hitFlash)
 			enemyColor.a =0.1f;

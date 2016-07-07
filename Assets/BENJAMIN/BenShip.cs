@@ -16,6 +16,11 @@ public class BenShip : BenColored {
 
     public bool canFire = true;
 
+    public int redAmmo = 200, maxRedAmmo = 500;
+    public int greenAmmo = 30, maxGreenAmmo = 40;
+    public int blueAmmo = 140, maxBlueAmmo = 200;
+    public int yellowAmmo = 15, maxYellowAmmo = 20;
+
     public ParticleSystem colorPulse, muzzle;
 
     public BenProjectileSpawner redGun, greenGun, blueGun, yellowGun;
@@ -38,16 +43,16 @@ public class BenShip : BenColored {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetButtonDown("Red"))
             ChangeShipColor(ObjectColor.Red);
 
-        if (Input.GetKeyDown(KeyCode.G))
+		if (Input.GetButtonDown("Green"))
             ChangeShipColor(ObjectColor.Green);
 
-        if (Input.GetKeyDown(KeyCode.B))
+		if (Input.GetButtonDown("Blue"))
             ChangeShipColor(ObjectColor.Blue);
 
-        if (Input.GetKeyDown(KeyCode.Y))
+		if (Input.GetButtonDown("Yellow"))
             ChangeShipColor(ObjectColor.Yellow);
 
         float dist = 0;
@@ -60,6 +65,8 @@ public class BenShip : BenColored {
                 if (dist < colliderDistance)
                 {
                     //Player picked up a bullet
+                    PickUpAmmo(bp);
+
                     toDestroy.Add(bp);
                 }
                 else if (dist < suckingDistance)
@@ -74,6 +81,93 @@ public class BenShip : BenColored {
             bp.Destroy();
         
 	}
+
+    public bool CanUseAmmo(ObjectColor color)
+    {
+        switch (color)
+        {
+            case ObjectColor.Red: return redAmmo > 0;
+            case ObjectColor.Green: return greenAmmo > 0;
+            case ObjectColor.Blue: return blueAmmo > 0;
+            case ObjectColor.Yellow: return yellowAmmo > 0;
+        }
+
+        return false;
+    }
+
+    //Returns true if 1 ammo was consumed, and the ProjectileSpawner can shoot
+    public bool Shoot(BenProjectileSpawner bp)
+    {
+        if (CanUseAmmo(bp.objectColor))
+        {
+            AmmoRing.instance.Pulse(1.05f, 0.1f);
+            //Trigger UI update
+            AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.UpdateAmmo();
+
+            switch (bp.objectColor)
+            {
+                case ObjectColor.Red: redAmmo--; break;
+                case ObjectColor.Green: greenAmmo--; break;
+                case ObjectColor.Blue: blueAmmo--; break;
+                case ObjectColor.Yellow: yellowAmmo--; break;
+            }
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public void PickUpAmmo(BenProjectile p)
+    {
+        switch (p.objectColor)
+        {
+            case ObjectColor.Red: 
+                redAmmo = Mathf.Clamp(redAmmo + p.ammoValue, 0, maxRedAmmo); 
+                break;
+
+            case ObjectColor.Green:
+                greenAmmo = Mathf.Clamp(greenAmmo + p.ammoValue, 0, maxGreenAmmo);
+                break;
+
+            case ObjectColor.Blue:
+                blueAmmo = Mathf.Clamp(blueAmmo + p.ammoValue, 0, maxBlueAmmo);
+                break;
+            case ObjectColor.Yellow:
+                yellowAmmo = Mathf.Clamp(yellowAmmo + p.ammoValue, 0, maxYellowAmmo);
+                break;
+
+            default: break;
+        }
+
+        AmmoRing.instance.Pulse();
+        AmmoRing.instance.UpdateAmmo();
+        ButtonUI.instance.UpdateAmmo();
+    }
+
+    public int GetCurrentAmmoCount()
+    {
+        switch (currentGun.objectColor)
+        {
+            case ObjectColor.Red: return redAmmo;
+            case ObjectColor.Green: return greenAmmo;
+            case ObjectColor.Blue: return blueAmmo;
+            case ObjectColor.Yellow: return yellowAmmo;
+        }
+        return 0;
+    }
+
+    public int GetCurrentMaxAmmo()
+    {
+        switch (currentGun.objectColor)
+        {
+            case ObjectColor.Red: return maxRedAmmo;
+            case ObjectColor.Green: return maxGreenAmmo;
+            case ObjectColor.Blue: return maxBlueAmmo;
+            case ObjectColor.Yellow: return maxYellowAmmo;
+        }
+        return 1;
+    }
 
     public void DoTransformation(ObjectColor color)
     {
@@ -135,6 +229,7 @@ public class BenShip : BenColored {
     {
         if (objectColor != color)
         {
+            
             DoTransformation(color);
             if (currentGun != null)
                 currentGun.enabled = false;
@@ -149,6 +244,9 @@ public class BenShip : BenColored {
             colorPulse.Emit(1);
             muzzle.startColor = c;
             base.ChangeColor(color);
+            AmmoRing.instance.ChangeWeapon(currentGun);
+            AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.ChangeWeapon(currentGun.objectColor);
         }
     }
 
