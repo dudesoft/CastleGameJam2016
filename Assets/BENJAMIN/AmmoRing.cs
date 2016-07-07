@@ -19,6 +19,7 @@ public class AmmoRing : MonoBehaviour {
 	void Update () {
         ring.fillAmount = fill;
         transform.localRotation = Quaternion.AngleAxis(fill * 360 / 2,Vector3.forward);
+
         if (Input.GetKeyDown(KeyCode.U))
         {
             Pulse();
