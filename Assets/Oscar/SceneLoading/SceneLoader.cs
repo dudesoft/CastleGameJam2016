@@ -66,13 +66,20 @@ public class SceneLoader : MonoBehaviour {
             yield return null;
         }
         // Load end animation
+        //float offset = ProgressBarSpeed * Time.deltaTime;
+        //float accumulated = 0;
+        //while (offset < screenWidth) {
+        //    accumulated += offset;
+        //    progressBar.transform.position += (Vector3.right * offset);
+        //    yield return null;
+        //}
 
-        // Allow scene activation
-        asyncOp.allowSceneActivation = true;
         // Trigger load end event
-        if(LoadEnded != null) {
+        if (LoadEnded != null) {
             LoadEnded();
         }
+        // Allow scene activation
+        asyncOp.allowSceneActivation = true;
     }
 }
 
