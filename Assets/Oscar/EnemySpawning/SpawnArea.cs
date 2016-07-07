@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class SpawnArea: MonoBehaviour {
@@ -42,28 +43,37 @@ public class SpawnArea: MonoBehaviour {
     private bool used = false;
     private EnemySpawner spawner;
 
+    // Wave finished area type
+    private int enemiesLeft;
+    private int precedingLeft;
+
+    public bool WaitForPreceding;
+    public List<SpawnArea> PrecedingAreas;
+
+    public delegate void WaveClearedEventHandler();
+    public event WaveClearedEventHandler WaveCleared;
+
+    // Time based area type
+    public float Delay;
+
     void Start() {
         spawner = GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawner>();
+        // Subscribe to preceding waves        
+        if(WaitForPreceding) {
+            precedingLeft = PrecedingAreas.Count;
+            foreach(SpawnArea sa in PrecedingAreas) {
+                sa.WaveCleared += UpdatePrecedingCount;
+            }               
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(!used && col.tag == "Player") {
-            switch (Pattern) {
-                case SpawnPattern.Point:
-                    StartCoroutine(spawner.PointSpawner(transform.position, EnemyAmount, Period, EnemyPrefabIndex, EnemyColor));
-                    break;
-                case SpawnPattern.Line:
-                    StartCoroutine(spawner.LineSpawner(transform.position, transform.position + LineDirection, EnemyAmount, Period, EnemyPrefabIndex, EnemyColor));
-                    break;
-                case SpawnPattern.Circle:
-                    StartCoroutine(spawner.CircleSpawner(transform.position, Radius, EnemyAmount, Period, EnemyPrefabIndex, EnemyColor));
-                    break;
-                case SpawnPattern.Unit:
-                    StartCoroutine(spawner.UnitSpawner(transform.position, ForwardDir, Rows, UnitSpacing, Period, EnemyPrefabIndex, EnemyColor));
-                    break;
+        if(!WaitForPreceding) {
+            if (!used && col.tag == "Player") {
+                Invoke("TriggerSpawning", Delay);
+                used = true;
             }
-            used = true;
-        }
+        }        
     }
 
     void OnDrawGizmos() {
@@ -113,4 +123,49 @@ public class SpawnArea: MonoBehaviour {
         }
     }
 
+
+    void TriggerSpawning() {
+        switch (Pattern) {
+            case SpawnPattern.Point:
+                StartCoroutine(spawner.PointSpawner(transform.position, EnemyAmount, Period, EnemyPrefabIndex, EnemyColor, WaveStateUpdater));
+                enemiesLeft = EnemyAmount;
+                break;
+            case SpawnPattern.Line:
+                StartCoroutine(spawner.LineSpawner(transform.position, transform.position + LineDirection, EnemyAmount, Period, EnemyPrefabIndex, EnemyColor, WaveStateUpdater));
+                enemiesLeft = EnemyAmount;
+                break;
+            case SpawnPattern.Circle:
+                StartCoroutine(spawner.CircleSpawner(transform.position, Radius, EnemyAmount, Period, EnemyPrefabIndex, EnemyColor, WaveStateUpdater));
+                enemiesLeft = EnemyAmount;
+                break;
+            case SpawnPattern.Unit:
+                StartCoroutine(spawner.UnitSpawner(transform.position, ForwardDir, Rows, UnitSpacing, Period, EnemyPrefabIndex, EnemyColor, WaveStateUpdater));
+                enemiesLeft = 0;
+                int rowSize = - 1;
+                for (int r = 0; r < Rows; ++r) {
+                    rowSize += 2;
+                    enemiesLeft += rowSize;
+                }
+                break;
+        }
+    }
+
+    void UpdatePrecedingCount() {
+        --precedingLeft;
+        if(precedingLeft == 0) {
+            Invoke("TriggerSpawning", Delay);
+        }
+    }
+    void WaveStateUpdater(FreBaseEnemy deadEnemy) {
+        // Update number of enemies left
+        --enemiesLeft;
+        // Unsubscribe
+        deadEnemy.Died -= WaveStateUpdater;
+        if (enemiesLeft == 0) {
+            if(WaveCleared != null) {
+                WaveCleared();
+                Debug.Log("Wave cleared");
+            }
+        }
+    }
 }

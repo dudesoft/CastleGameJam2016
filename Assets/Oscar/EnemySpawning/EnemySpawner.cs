@@ -88,12 +88,12 @@ public class EnemySpawner : MonoBehaviour {
         //}
 	}
 
-    protected void Spawn(int prefabIndex, Vector3 position, ObjectColor color) {
+    protected void Spawn(int prefabIndex, Vector3 position, ObjectColor color, FreBaseEnemy.EnemyDiedEventHandler listener) {
         System.Type type = enemyPrefabs[prefabIndex].GetType();
-        Spawn(type, position, color);
+        Spawn(type, position, color, listener);
     }
 
-    protected void Spawn(System.Type type, Vector3 position, ObjectColor color) {
+    protected void Spawn(System.Type type, Vector3 position, ObjectColor color, FreBaseEnemy.EnemyDiedEventHandler listener) {
         Pool p;
         if (pools.TryGetValue(type, out p)) {
             // Get instance
@@ -101,6 +101,8 @@ public class EnemySpawner : MonoBehaviour {
             FreBaseEnemy newEnemy = newEnemyObj.GetComponent<FreBaseEnemy>();
             // Subscribe to death event
             newEnemy.Died += HandleDeadEnemy;
+            // Subscribe listener
+            newEnemy.Died += listener;
             // Set position and enable
             newEnemy.transform.position = position;
             newEnemy.ChangeColor(color);
@@ -126,10 +128,10 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns amount enemies at point with a period delay between them.
     /// </summary>
-    public IEnumerator PointSpawner(Vector3 point, int amount, float period, int prefabIndex, ObjectColor color) {
+    public IEnumerator PointSpawner(Vector3 point, int amount, float period, int prefabIndex, ObjectColor color, FreBaseEnemy.EnemyDiedEventHandler listener) {
         for(int i = 0; i < amount; ++i) {
             // Spawn
-            Spawn(prefabIndex, point, color);
+            Spawn(prefabIndex, point, color, listener);
             if (period > 0) {
                 yield return new WaitForSeconds(period);
             }     
@@ -138,10 +140,10 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns amount enemies along the line defined by start and end with a period delay between them.
     /// </summary>
-    public IEnumerator LineSpawner(Vector3 start, Vector3 end, int amount, float period, int prefabIndex, ObjectColor color) {
+    public IEnumerator LineSpawner(Vector3 start, Vector3 end, int amount, float period, int prefabIndex, ObjectColor color, FreBaseEnemy.EnemyDiedEventHandler listener) {
         for (int i = 0; i < amount; ++i) {
             // Spawn
-            Spawn(prefabIndex, Vector3.Lerp(start, end, (float)i / (float)amount), color);
+            Spawn(prefabIndex, Vector3.Lerp(start, end, (float)i / (float)amount), color, listener);
             if (period > 0) {
                 yield return new WaitForSeconds(period);
             }
@@ -151,13 +153,13 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns amount anemies along the circle defined by center and radius with a period delay between them.
     /// </summary>
-    public IEnumerator CircleSpawner(Vector3 center, float radius, int amount, float period, int prefabIndex, ObjectColor color) {
+    public IEnumerator CircleSpawner(Vector3 center, float radius, int amount, float period, int prefabIndex, ObjectColor color, FreBaseEnemy.EnemyDiedEventHandler listener) {
         float frac;
         float twoPi = 2 * Mathf.PI;
         for (int i = 0; i < amount; ++i) {
             // Spawn
             frac = ((float)i / (float)amount) * twoPi;
-            Spawn(prefabIndex, center + new Vector3(Mathf.Cos(frac), Mathf.Sin(frac), 0) * radius, color);
+            Spawn(prefabIndex, center + new Vector3(Mathf.Cos(frac), Mathf.Sin(frac), 0) * radius, color, listener);
             if (period > 0) {
                 yield return new WaitForSeconds(period);
             }
@@ -167,7 +169,7 @@ public class EnemySpawner : MonoBehaviour {
     /// <summary>
     /// Spawns enemies in a triangle unit formation with a period delay between them.
     /// </summary>
-    public IEnumerator UnitSpawner(Vector3 tip, Vector3 dir, int rows, float spacing, float rowPeriod, int prefabIndex, ObjectColor color) {
+    public IEnumerator UnitSpawner(Vector3 tip, Vector3 dir, int rows, float spacing, float rowPeriod, int prefabIndex, ObjectColor color, FreBaseEnemy.EnemyDiedEventHandler listener) {
         Vector3 nDir = dir.normalized;
         Vector3 orthoDir = new Vector3(nDir.y, -nDir.x, 0);
         int rowSize = -1;
@@ -178,7 +180,7 @@ public class EnemySpawner : MonoBehaviour {
             sideOffset = - Mathf.Floor(rowSize / 2.0f) * spacing;
             for (int n = 0; n < rowSize; ++n) {
                 // Spawn                
-                Spawn(prefabIndex, tip + sideOffset * orthoDir + frontOffset * nDir, color);
+                Spawn(prefabIndex, tip + sideOffset * orthoDir + frontOffset * nDir, color, listener);
                 sideOffset += spacing;
             }
             if (rowPeriod > 0) {
