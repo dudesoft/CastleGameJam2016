@@ -21,6 +21,13 @@ public class BeatManager : MonoBehaviour {
     public float bloomLowIntensity = 0.3f;
     float bloomIntensity;
 
+    public float beatDuration
+    {
+        get
+        {
+            return 60f / bpm;
+        }
+    }
 
     void Awake()
     {
@@ -60,6 +67,23 @@ public class BeatManager : MonoBehaviour {
         {
             bloom.OverallIntensity = val;
         });
+    }
+
+    public float TimeSinceLastBeat
+    {
+        get { return Time.time - lastBeat; }
+    }
+
+    public float TimeToNextTransform()
+    {
+        float nextBeat = beatDuration - TimeSinceLastBeat;
+        if (beat == 1)
+            nextBeat += beatDuration;
+        if (beat == 3)
+            nextBeat += beatDuration * 3;
+        if (beat == 4)
+            nextBeat += beatDuration * 2;
+        return nextBeat;
     }
 
     IEnumerator UnBeat()
