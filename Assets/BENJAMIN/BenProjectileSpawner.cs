@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BenProjectileSpawner : BenColored {
 
     public bool beatSynced = false;
+    public List<int> shootingBeats;
 
     public BenProjectile projectile;
     public float fireRate = 0.1f;
@@ -70,7 +72,8 @@ public class BenProjectileSpawner : BenColored {
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
 
-        if (fireing && ((beatSynced && BeatManager.instance.beating) || !beatSynced) && ((BenShip.instance.canFire && isPlayer && BenShip.instance.CanUseAmmo(objectColor)) || !isPlayer))
+
+        if (fireing && ((beatSynced && BeatManager.instance.beating) || (!beatSynced && shootingBeats.Contains(BeatManager.instance.beat))) && ((BenShip.instance.canFire && isPlayer && BenShip.instance.CanUseAmmo(objectColor)) || !isPlayer))
         {
             Quaternion fromRot = transform.rotation;
             while (wait >= fireRate)
