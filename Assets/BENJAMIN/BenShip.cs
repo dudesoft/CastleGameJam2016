@@ -46,6 +46,13 @@ public class BenShip : BenColored {
     public ObjectColor nextTransform = ObjectColor.Red;
 
 	void Update () {
+
+        if (BeatManager.instance.beating)
+        {
+            BenShip.instance.transform.localScale = Vector3.one * 1.1f;
+            LeanTween.scale(gameObject, Vector3.one, 0.1f);
+        }
+
         if (Input.GetButtonDown("Red"))
             nextTransform = ObjectColor.Red;
 

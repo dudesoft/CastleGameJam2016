@@ -16,10 +16,17 @@ public class BeatManager : MonoBehaviour {
     public AudioSource[] tracks;
     public bool beating = false;
     public bool canTransform = false;
-    
+
+    AmplifyBloom.AmplifyBloomEffect bloom;
+    public float bloomLowIntensity = 0.3f;
+    float bloomIntensity;
+
 
     void Awake()
     {
+        bloom = Camera.main.GetComponent<AmplifyBloom.AmplifyBloomEffect>();
+        bloomIntensity = bloom.OverallIntensity;
+        bloom.OverallIntensity = 0;
         instance = this;
     }
 
@@ -47,8 +54,12 @@ public class BeatManager : MonoBehaviour {
             StartCoroutine(UnTransform());
         }
 
-        BenShip.instance.transform.localScale = Vector3.one * 1.1f;
-        LeanTween.scale(BenShip.instance.gameObject, Vector3.one, 0.1f);
+        bloom.OverallIntensity = bloomIntensity;
+        LeanTween.value(bloom.gameObject, bloom.OverallIntensity, bloomLowIntensity, 0.2f).setOnUpdate(
+        (float val) =>
+        {
+            bloom.OverallIntensity = val;
+        });
     }
 
     IEnumerator UnBeat()
