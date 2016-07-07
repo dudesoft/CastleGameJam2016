@@ -42,18 +42,31 @@ public class BenShip : BenColored {
 	}
 	
 	// Update is called once per frame
+
+    public ObjectColor nextTransform = ObjectColor.Red;
+
 	void Update () {
         if (Input.GetButtonDown("Red"))
-            ChangeShipColor(ObjectColor.Red);
+            nextTransform = ObjectColor.Red;
 
 		if (Input.GetButtonDown("Green"))
-            ChangeShipColor(ObjectColor.Green);
+            nextTransform = ObjectColor.Green;
 
 		if (Input.GetButtonDown("Blue"))
-            ChangeShipColor(ObjectColor.Blue);
+            nextTransform = ObjectColor.Blue;
 
 		if (Input.GetButtonDown("Yellow"))
-            ChangeShipColor(ObjectColor.Yellow);
+            nextTransform = ObjectColor.Yellow;
+
+        if (BeatManager.instance.canTransform && nextTransform != objectColor)
+        {
+            ChangeShipColor(nextTransform);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            RefillAmmo();
+        }
 
         float dist = 0;
         toDestroy.Clear();
@@ -82,6 +95,19 @@ public class BenShip : BenColored {
         
 	}
 
+    
+
+    void RefillAmmo()
+    {
+        redAmmo = maxRedAmmo;
+        greenAmmo = maxGreenAmmo;
+        blueAmmo = maxBlueAmmo;
+        yellowAmmo = maxYellowAmmo;
+
+        AmmoRing.instance.UpdateAmmo();
+        ButtonUI.instance.UpdateAmmo();
+    }
+
     public bool CanUseAmmo(ObjectColor color)
     {
         switch (color)
@@ -95,7 +121,12 @@ public class BenShip : BenColored {
         return false;
     }
 
-    //Returns true if 1 ammo was consumed, and the ProjectileSpawner can shoot
+    /// <summary>
+    /// Returns true if 1 ammo was consumed, and the ProjectileSpawner can shoot
+    /// </summary>
+    /// <param name="bp"></param>
+    /// <returns></returns>
+ 
     public bool Shoot(BenProjectileSpawner bp)
     {
         if (CanUseAmmo(bp.objectColor))
@@ -244,7 +275,8 @@ public class BenShip : BenColored {
             colorPulse.Emit(1);
             muzzle.startColor = c;
             base.ChangeColor(color);
-            AmmoRing.instance.ChangeWeapon(currentGun);
+            if (currentGun)
+                AmmoRing.instance.ChangeWeapon(currentGun);
             AmmoRing.instance.UpdateAmmo();
             ButtonUI.instance.ChangeWeapon(currentGun.objectColor);
         }

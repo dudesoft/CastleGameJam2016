@@ -32,7 +32,11 @@ public class ButtonUI : MonoBehaviour {
 
     public void UpdateAmmo()
     {
-        GetBar(BenShip.instance.currentGun.objectColor).fillAmount = (BenShip.instance.GetCurrentAmmoCount() / (float)BenShip.instance.GetCurrentMaxAmmo());
+        redBar.fillAmount = (BenShip.instance.redAmmo / (float)BenShip.instance.maxRedAmmo);
+        greenBar.fillAmount = (BenShip.instance.greenAmmo / (float)BenShip.instance.maxGreenAmmo);
+        blueBar.fillAmount = (BenShip.instance.blueAmmo / (float)BenShip.instance.maxBlueAmmo);
+        yellowBar.fillAmount = (BenShip.instance.yellowAmmo / (float)BenShip.instance.maxYellowAmmo);
+        //GetBar(BenShip.instance.currentGun.objectColor).fillAmount = (BenShip.instance.GetCurrentAmmoCount() / (float)BenShip.instance.GetCurrentMaxAmmo());
     }
 
     Image GetButton(ObjectColor color)

@@ -51,8 +51,9 @@ public class BenProjectile : BenColored {
         rigid.velocity = velocity;
         countdown -= Time.deltaTime;
         if (countdown <= 0)
-            this.Destroy();
+            this.Destroy();        
     }
+
 
     public void Destroy()
     {
