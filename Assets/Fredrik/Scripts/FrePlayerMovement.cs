@@ -20,10 +20,15 @@ public class FrePlayerMovement : MonoBehaviour {
 	PlayerIndex playerIndex;
 	GamePadState state;
 	GamePadState prevState;
-
+	bool isAiming = false;
     public Vector3 lookDirection;
     public float lookDistance = 0;
     public float maxLookDistance = 10;
+
+	public bool IsAiming()
+	{
+		return isAiming;
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -97,6 +102,7 @@ public class FrePlayerMovement : MonoBehaviour {
 
         if (aimVec != Vector2.zero)
         {
+			isAiming = true;
 			transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg),
 				Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg)));
 
@@ -104,7 +110,10 @@ public class FrePlayerMovement : MonoBehaviour {
             
         }
         else
+		{
             lookDistance = 0;
+			isAiming = false;
+		}
 	}
 
     /// <summary>
