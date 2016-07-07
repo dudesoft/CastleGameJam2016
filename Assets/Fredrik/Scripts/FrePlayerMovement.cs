@@ -41,26 +41,35 @@ public class FrePlayerMovement : MonoBehaviour {
 		Vector2 moveVec = Vector2.zero;
 		Vector2 aimVec = Vector2.zero;
 
+		if (!playerIndexSet || !prevState.IsConnected)
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				PlayerIndex testPlayerIndex = (PlayerIndex)i;
+				GamePadState testState = GamePad.GetState(testPlayerIndex);
+				if (testState.IsConnected)
+				{
+					Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
+					playerIndex = testPlayerIndex;
+					playerIndexSet = true;
+				}
+			}
+		} 
+			
+		prevState = state;
+		state = GamePad.GetState(playerIndex);
+
+		if(KeyboardUsedCheck())
+			controller = ControlTypes.MouseKeyboard;
+		else if(GamepadUsedCheck())
+			controller = ControlTypes.Gamepad;
+
 		switch(controller)
 		{
 		case ControlTypes.Gamepad:
-			if (!playerIndexSet || !prevState.IsConnected)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					PlayerIndex testPlayerIndex = (PlayerIndex)i;
-					GamePadState testState = GamePad.GetState(testPlayerIndex);
-					if (testState.IsConnected)
-					{
-						Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
-						playerIndex = testPlayerIndex;
-						playerIndexSet = true;
-					}
-				}
-			} 
 
-			prevState = state;
-			state = GamePad.GetState(playerIndex);
+
+
 
 			if(deadZone < GetAnalogueMagnitude(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y))
 			{
@@ -103,14 +112,27 @@ public class FrePlayerMovement : MonoBehaviour {
         if (aimVec != Vector2.zero)
         {
 			isAiming = true;
-			transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg),
-				Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg)));
-
-            lookDirection = aimVec;
+			if((Input.GetMouseButton(0)|| moveVec == Vector2.zero)||ControlTypes.Gamepad == controller)
+			{
+				transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg),
+					Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg)));
+				lookDirection = aimVec;
+			}
+			else
+			{
+				transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg),
+					Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg)));
+				lookDirection = moveVec;
+			}
+            
             
         }
         else
 		{
+			
+			transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg),
+				Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg)));
+			lookDirection = moveVec;
             lookDistance = 0;
 			isAiming = false;
 		}
@@ -151,4 +173,27 @@ public class FrePlayerMovement : MonoBehaviour {
         float vertical = UnityEngine.Input.GetAxis(yAxis);
         return GetAnalogueMagnitude(horizontal, vertical);
     }
+
+	bool GamepadUsedCheck()
+	{
+		float sticksValue = Mathf.Abs( state.ThumbSticks.Left.X);
+		sticksValue += Mathf.Abs( state.ThumbSticks.Left.Y);
+		sticksValue += Mathf.Abs( state.ThumbSticks.Right.X);
+		sticksValue += Mathf.Abs( state.ThumbSticks.Right.Y);
+		return sticksValue > deadZone;
+	}
+
+	bool KeyboardUsedCheck()
+	{
+		return Input.GetKeyDown(KeyCode.W) ||
+			Input.GetKeyDown(KeyCode.A) ||
+			Input.GetKeyDown(KeyCode.S) ||
+			Input.GetKeyDown(KeyCode.D) ||
+			Input.GetKeyDown(KeyCode.UpArrow) ||
+			Input.GetKeyDown(KeyCode.LeftArrow) ||
+			Input.GetKeyDown(KeyCode.RightArrow) ||
+			Input.GetKeyDown(KeyCode.DownArrow) ||
+			Input.GetMouseButtonDown(0);
+
+	}
 }
