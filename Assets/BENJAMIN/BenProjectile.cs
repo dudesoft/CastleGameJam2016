@@ -87,6 +87,7 @@ public class BenProjectile : BenColored {
 
         if (col.gameObject.CompareTag("Enemy") && canHitEnemy)
         {
+			col.GetComponent<FreBaseEnemy>().DealDamage(damage);
             Impact(transform.position);
         }
 
