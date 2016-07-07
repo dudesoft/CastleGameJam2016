@@ -101,6 +101,11 @@ public class BenProjectile : BenColored {
 			SceneLoader load = FindObjectOfType<SceneLoader>();
 			if(load != null)
 			{
+				BenPlayerCamera cam = FindObjectOfType<BenPlayerCamera>();
+				if(cam != null)
+				{
+					cam.enabled = false;
+				}
 				load.NextSceneIndex = 0;
 				load.LoadScene();
 				col.gameObject.SetActive(false);
