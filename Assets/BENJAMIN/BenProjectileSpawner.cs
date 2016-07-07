@@ -88,7 +88,7 @@ public class BenProjectileSpawner : BenColored {
                     
                 }
                 //InAudio.Play(gameObject, shootAudio);
-                if (muzzle)
+				if (isPlayer &&muzzle)
                     muzzle.Emit(5);
             }
 

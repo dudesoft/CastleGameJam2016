@@ -94,6 +94,16 @@ public class BenProjectile : BenColored {
         if (col.gameObject.CompareTag("Player"))
         {
             Impact(transform.position);
+			// Fre 
+			// Changes Scene back to meny 
+			// Add deathsound and explosion
+			SceneLoader load = FindObjectOfType<SceneLoader>();
+			if(load != null)
+			{
+				load.NextSceneIndex = 0;
+				load.LoadScene();
+				col.gameObject.SetActive(false);
+			}
         }
 
         if (!col.isTrigger)
