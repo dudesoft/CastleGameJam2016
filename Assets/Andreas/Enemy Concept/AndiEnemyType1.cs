@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AndiEnemy2 : FreBaseEnemy
+public class AndiEnemyType1 : FreBaseEnemy
 {
     public float speed = 2;
     private Rigidbody2D rigidbody;
