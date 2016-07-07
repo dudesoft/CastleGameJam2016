@@ -16,7 +16,6 @@ public class AndiTestEnemy : FreBaseEnemy
     private bool moveAllowed = true;
     private bool slowed = false;
 
-    // Use this for initialization
     void Start()
     {
 
@@ -27,7 +26,6 @@ public class AndiTestEnemy : FreBaseEnemy
 		
 	}	
 
-    // Update is called once per frame
     void Update()
     {
         Move();
