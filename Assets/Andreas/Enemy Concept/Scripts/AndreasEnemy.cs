@@ -5,21 +5,24 @@ public class AndreasEnemy : FreBaseEnemy
     private Vector3 targetLocation;
 
     public float speed = 2;
-    public int value = 100;
-    public int life = 100;
-	public FrePlayerMovement playerDummy;
+
+//	public FrePlayerMovement playerDummy;
     private bool engaging = true;
 
     private Camera camera2d;
     private bool moveAllowed = true;
     private bool slowed = false;
 
-    void Start()
+	void Awake()
     {
-        camera2d = Camera.main;
-		playerDummy = FindObjectOfType<FrePlayerMovement>();
-        targetLocation = GetNewTargetLocation();
+		Init();
     }
+
+	protected override void Init()
+	{
+		camera2d = Camera.main;
+		targetLocation = GetNewTargetLocation();
+	}	
 
     void Update()
     {
@@ -59,7 +62,7 @@ public class AndreasEnemy : FreBaseEnemy
 
     private Vector3 GetNewTargetLocationOutSide()
     {
-        return RotateAroundPoint(playerDummy.transform.position, transform.position, Quaternion.Euler(0, 0, Random.Range(-80, 80)));
+		return RotateAroundPoint(playerObject.transform.position, transform.position, Quaternion.Euler(0, 0, Random.Range(-80, 80)));
     }
 
 
@@ -77,7 +80,7 @@ public class AndreasEnemy : FreBaseEnemy
     {
         if (engaging)
         {
-            targetLocation = playerDummy.transform.position;
+			targetLocation = playerObject.transform.position;
         }
         Vector3 vectorToTarget = targetLocation - transform.position;
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
