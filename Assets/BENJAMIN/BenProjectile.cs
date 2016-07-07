@@ -15,6 +15,7 @@ public class BenProjectile : BenColored {
     float countdown;
     public BenProjectileSpawner origin;
     public Rigidbody2D rigid;
+    public float dampen = 0;
 
     [HideInInspector]
     public bool disabled;
@@ -26,6 +27,7 @@ public class BenProjectile : BenColored {
 
 	public void Init(Vector3 position, Vector3 direction, float timeOffset, float angle, ObjectColor color, BenProjectileSpawner origin)
     {
+        rigid.drag = dampen;
         this.origin = origin;
         ChangeColor(color);
         projectiles.Add(this);
@@ -42,6 +44,9 @@ public class BenProjectile : BenColored {
     void Update()
     {
         //transform.position += velocity * Time.deltaTime;
+        if (dampen != 0)
+            velocity = velocity * (1-(dampen*Time.deltaTime));
+
         rigid.velocity = velocity;
         countdown -= Time.deltaTime;
         if (countdown <= 0)
@@ -58,9 +63,11 @@ public class BenProjectile : BenColored {
 
     public void Impact(Vector3 pos)
     {
-        origin.bulletImpact.startColor = Color.Lerp(Color.white, BenColored.GetRGB(objectColor), 0.33f);
-        origin.bulletImpact.transform.position = pos;
-        origin.bulletImpact.Emit(3);
+        if (origin.bulletImpact) {
+            origin.bulletImpact.startColor = Color.Lerp(Color.white, BenColored.GetRGB(objectColor), 0.33f);
+            origin.bulletImpact.transform.position = pos;
+            origin.bulletImpact.Emit(3);
+        }        
         //InAudio.PlayAtPosition(origin.gameObject, origin.bulletImpactAudio, pos);
         Destroy();
     }
@@ -75,10 +82,24 @@ public class BenProjectile : BenColored {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject != origin.gameObject)
+        if (col.gameObject == origin.gameObject)
+            return;
+
+        if (col.gameObject.CompareTag("Enemy") && canHitEnemy)
         {
             Impact(transform.position);
         }
+
+        if (col.gameObject.CompareTag("Player"))
+        {
+            Impact(transform.position);
+        }
+
+        if (!col.isTrigger)
+        {
+            Impact(transform.position);
+        }
+        
     }
 
 }

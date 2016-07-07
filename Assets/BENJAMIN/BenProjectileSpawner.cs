@@ -60,10 +60,10 @@ public class BenProjectileSpawner : BenColored {
             {
                 wait -= fireRate;
 
-                float angleOffset = -spread/2;
+				float angleOffset = -spread/2 + Random.Range(-randomSpread/2,randomSpread/2);
 
                 if (simultaneousProjectiles <= 1)
-                    angleOffset = 0;
+					angleOffset = Random.Range(-randomSpread/2,randomSpread/2);
 
                 for (int i = 0; i < simultaneousProjectiles; i++)
                 {
@@ -79,7 +79,8 @@ public class BenProjectileSpawner : BenColored {
                     
                 }
                 //InAudio.Play(gameObject, shootAudio);
-                muzzle.Emit(5);
+                if (muzzle)
+                    muzzle.Emit(5);
             }
 
             transform.rotation = fromRot;
