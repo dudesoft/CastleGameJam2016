@@ -43,16 +43,16 @@ public class BenShip : BenColored {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetButtonDown("Red"))
             ChangeShipColor(ObjectColor.Red);
 
-        if (Input.GetKeyDown(KeyCode.G))
+		if (Input.GetButtonDown("Green"))
             ChangeShipColor(ObjectColor.Green);
 
-        if (Input.GetKeyDown(KeyCode.B))
+		if (Input.GetButtonDown("Blue"))
             ChangeShipColor(ObjectColor.Blue);
 
-        if (Input.GetKeyDown(KeyCode.Y))
+		if (Input.GetButtonDown("Yellow"))
             ChangeShipColor(ObjectColor.Yellow);
 
         float dist = 0;
