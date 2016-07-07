@@ -3,26 +3,16 @@ using System.Collections;
 
 public class AndiTestEnemy : FreBaseEnemy
 {
-
     private Vector3 targetLocation;
 
     public float speed = 2;
-    public int value = 100;
-    public GameObject playerDummy;
+    private GameObject player;
     private bool engaging = true;
-
-    private Camera camera2d;
-    private bool moveAllowed = true;
-    private bool slowed = false;
-
-    void Start()
-    {
-
-    }
 
 	protected override void Init()
 	{
-		
+        speed = speed * Random.Range(1, 1.5f);
+        player = GameObject.FindGameObjectWithTag("Player");
 	}	
 
     void Update()
@@ -34,7 +24,7 @@ public class AndiTestEnemy : FreBaseEnemy
     {
         if (engaging)
         {
-            targetLocation = playerDummy.transform.position;
+            targetLocation = player.transform.position;
         }
         Vector3 vectorToTarget = targetLocation - transform.position;
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
@@ -44,7 +34,7 @@ public class AndiTestEnemy : FreBaseEnemy
 
     private Vector3 GetNewTargetLocationOutSide()
     {
-        return RotateAroundPoint(playerDummy.transform.position, transform.position, Quaternion.Euler(0, 0, Random.Range(-80, 80)));
+        return RotateAroundPoint(player.transform.position, transform.position, Quaternion.Euler(0, 0, Random.Range(-80, 80)));
     }
 
 
