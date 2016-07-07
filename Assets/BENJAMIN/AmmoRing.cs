@@ -13,12 +13,14 @@ public class AmmoRing : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GetComponent<Image>();
+        Canvas.ForceUpdateCanvases();
 	}
 	
 	// Update is called once per frame
 	void Update () {
         ring.fillAmount = fill;
         transform.localRotation = Quaternion.AngleAxis(fill * 360 / 2,Vector3.forward);
+
         if (Input.GetKeyDown(KeyCode.U))
         {
             Pulse();

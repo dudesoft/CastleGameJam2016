@@ -41,8 +41,8 @@ public class BenProjectileSpawner : BenColored {
 
 	// Update is called once per frame
 	void Update () {
-
-        if (player != null)
+		 
+		if (isPlayer)
             fireing = Input.GetMouseButton(0);
 
         //Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -68,8 +68,6 @@ public class BenProjectileSpawner : BenColored {
                 for (int i = 0; i < simultaneousProjectiles; i++)
                 {
                     BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
-                    p.canHitPlayer = false;
-                    p.canHitEnemy = true;
 
                     transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
 
