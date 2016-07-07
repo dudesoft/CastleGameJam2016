@@ -11,6 +11,8 @@ public class ButtonUI : MonoBehaviour {
 
     public static ButtonUI instance;
 
+    public Image currentButton;
+
     void Awake()
     {
         instance = this;
@@ -19,6 +21,13 @@ public class ButtonUI : MonoBehaviour {
 	public void ChangeWeapon(ObjectColor color)
     {
         UpdateAmmo();
+
+        if (currentButton != null)
+            LeanTween.scale(currentButton.gameObject, Vector3.one, 0.4f);
+        
+        currentButton = GetButton(BenShip.instance.currentGun.objectColor);
+
+        LeanTween.scale(currentButton.gameObject, Vector3.one * 1.5f, 0.2f).setEase(LeanTweenType.easeInBack);
     }
 
     public void UpdateAmmo()
