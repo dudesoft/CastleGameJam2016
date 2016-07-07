@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent (typeof(SpriteRenderer))]
 public class FreBaseEnemy : BenColored {
 
-
 	int curentHealth;
 	public int health =50;
 	public int collisionDamage;
