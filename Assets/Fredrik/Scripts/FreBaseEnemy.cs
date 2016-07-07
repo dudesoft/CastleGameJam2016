@@ -43,7 +43,7 @@ public class FreBaseEnemy : BenColored {
 		
 	public void DealDamage(int damage)
 	{
-
+		hitFlash=true;
 		curentHealth -= damage;
 		if(curentHealth <= 0)
 		{
@@ -62,7 +62,7 @@ public class FreBaseEnemy : BenColored {
 		enemyColor = BenColored.GetRGB(objectColor);
 
 		if(hitFlash)
-			enemyColor.a =0.5f;
+			enemyColor.a =0.1f;
 
 		hitFlash = false;
 		spr.color = enemyColor;

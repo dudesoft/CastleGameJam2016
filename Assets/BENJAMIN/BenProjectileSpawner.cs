@@ -42,9 +42,18 @@ public class BenProjectileSpawner : BenColored {
 	// Update is called once per frame
 	void Update () {
 		 
-		if (isPlayer)
-            fireing = Input.GetMouseButton(0);
-
+		if (isPlayer && player != null)
+		{
+			switch(player.controller)
+			{
+			case ControlTypes.MouseKeyboard:
+				fireing = Input.GetMouseButton(0);
+				break;
+			case ControlTypes.Gamepad:
+				fireing = player.IsAiming();
+				break;
+			}
+		}
         //Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         //if (isPlayer)
         //    angle = Mathf.Atan2(player.lookDirection.y, player.lookDirection.x) * Mathf.Rad2Deg;
@@ -79,7 +88,7 @@ public class BenProjectileSpawner : BenColored {
                     
                 }
                 //InAudio.Play(gameObject, shootAudio);
-                if (muzzle)
+				if (isPlayer &&muzzle)
                     muzzle.Emit(5);
             }
 
