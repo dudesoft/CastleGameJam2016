@@ -2,9 +2,9 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+//#if UNITY_EDITOR
+//using UnityEditor;
+//#endif
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class SceneLoader : MonoBehaviour {
@@ -76,18 +76,18 @@ public class SceneLoader : MonoBehaviour {
     }
 }
 
-#if UNITY_EDITOR
-[CustomEditor(typeof(SceneLoader))]
-public class SceneLoaderEditor : Editor {
-    public override void OnInspectorGUI() {
-        SceneLoader myScript = (SceneLoader)target;
-        //myScript.CurrentSceneIndex = EditorGUILayout.IntField("Current Scene Index", myScript.CurrentSceneIndex);
-        myScript.NextSceneIndex = EditorGUILayout.IntField("Next Scene Index", myScript.NextSceneIndex);
-        myScript.UseButton = GUILayout.Toggle(myScript.UseButton, "Use Button");
-        if (myScript.UseButton) {
-            myScript.ButtonName = EditorGUILayout.TextField("Button Name", myScript.ButtonName);
-        }
-        myScript.ProgressBarSpeed = EditorGUILayout.FloatField("Progress Bar Speed", myScript.ProgressBarSpeed);
-    }
-}
-#endif
+//#if UNITY_EDITOR
+//[CustomEditor(typeof(SceneLoader))]
+//public class SceneLoaderEditor : Editor {
+//    public override void OnInspectorGUI() {
+//        SceneLoader myScript = (SceneLoader)target;
+//        //myScript.CurrentSceneIndex = EditorGUILayout.IntField("Current Scene Index", myScript.CurrentSceneIndex);
+//        myScript.NextSceneIndex = EditorGUILayout.IntField("Next Scene Index", myScript.NextSceneIndex);
+//        myScript.UseButton = GUILayout.Toggle(myScript.UseButton, "Use Button");
+//        if (myScript.UseButton) {
+//            myScript.ButtonName = EditorGUILayout.TextField("Button Name", myScript.ButtonName);
+//        }
+//        myScript.ProgressBarSpeed = EditorGUILayout.FloatField("Progress Bar Speed", myScript.ProgressBarSpeed);
+//    }
+//}
+//#endif
