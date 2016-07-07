@@ -103,6 +103,7 @@ public class BenShip : BenColored {
             AmmoRing.instance.Pulse(1.05f, 0.1f);
             //Trigger UI update
             AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.UpdateAmmo();
 
             switch (bp.objectColor)
             {
@@ -141,6 +142,7 @@ public class BenShip : BenColored {
 
         AmmoRing.instance.Pulse();
         AmmoRing.instance.UpdateAmmo();
+        ButtonUI.instance.UpdateAmmo();
     }
 
     public int GetCurrentAmmoCount()
@@ -244,6 +246,7 @@ public class BenShip : BenColored {
             base.ChangeColor(color);
             AmmoRing.instance.ChangeWeapon(currentGun);
             AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.ChangeWeapon(currentGun.objectColor);
         }
     }
 

@@ -11,15 +11,19 @@ public class ButtonUI : MonoBehaviour {
 
     public static ButtonUI instance;
 
-	public void UpdateWeapon()
+    void Awake()
+    {
+        instance = this;
+    }
+
+	public void ChangeWeapon(ObjectColor color)
     {
         UpdateAmmo();
-
     }
 
     public void UpdateAmmo()
     {
-        GetBar(BenShip.instance.currentGun.objectColor).fillAmount = (BenShip.instance.GetCurrentAmmoCount() / (float)BenShip.instance.GetCurrentMaxAmmo()) / 2;
+        GetBar(BenShip.instance.currentGun.objectColor).fillAmount = (BenShip.instance.GetCurrentAmmoCount() / (float)BenShip.instance.GetCurrentMaxAmmo());
     }
 
     Image GetButton(ObjectColor color)
