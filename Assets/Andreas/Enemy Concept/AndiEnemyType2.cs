@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AndiTestEnemy : FreBaseEnemy
+public class AndiEnemyType2 : FreBaseEnemy
 {
     private Vector3 targetLocation;
 
