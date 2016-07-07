@@ -15,8 +15,6 @@ public class SpawnArea: MonoBehaviour {
     public int EnemyPrefabIndex;
     public ObjectColor Color;
 
-    [Tooltip("Not used by Line pattern.")]
-    public Vector3 Position;
     [Tooltip("Not used by Unit pattern.")]
     public int EnemyAmount;
     [Tooltip("Unit pattern uses this on a row basis.")]
@@ -24,8 +22,7 @@ public class SpawnArea: MonoBehaviour {
 
     // Line
     [Header("Line")]
-    public Vector3 LineStart;
-    public Vector3 LineEnd;
+    public Vector3 LineDirection;
 
 
 
@@ -53,16 +50,16 @@ public class SpawnArea: MonoBehaviour {
         if(!used && col.tag == "Player") {
             switch (Pattern) {
                 case SpawnPattern.Point:
-                    StartCoroutine(spawner.PointSpawner(Position, EnemyAmount, Period, EnemyPrefabIndex, Color));
+                    StartCoroutine(spawner.PointSpawner(transform.position, EnemyAmount, Period, EnemyPrefabIndex, Color));
                     break;
                 case SpawnPattern.Line:
-                    StartCoroutine(spawner.LineSpawner(LineStart, LineEnd, EnemyAmount, Period, EnemyPrefabIndex, Color));
+                    StartCoroutine(spawner.LineSpawner(transform.position, transform.position + LineDirection, EnemyAmount, Period, EnemyPrefabIndex, Color));
                     break;
                 case SpawnPattern.Circle:
-                    StartCoroutine(spawner.CircleSpawner(Position, Radius, EnemyAmount, Period, EnemyPrefabIndex, Color));
+                    StartCoroutine(spawner.CircleSpawner(transform.position, Radius, EnemyAmount, Period, EnemyPrefabIndex, Color));
                     break;
                 case SpawnPattern.Unit:
-                    StartCoroutine(spawner.UnitSpawner(Position, ForwardDir, Rows, UnitSpacing, Period, EnemyPrefabIndex, Color));
+                    StartCoroutine(spawner.UnitSpawner(transform.position, ForwardDir, Rows, UnitSpacing, Period, EnemyPrefabIndex, Color));
                     break;
             }
             used = true;
