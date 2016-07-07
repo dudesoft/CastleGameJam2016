@@ -13,7 +13,7 @@ public class AmmoRing : MonoBehaviour {
     public static AmmoRing instance;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
     {
         instance = this;
         GetComponent<Image>();

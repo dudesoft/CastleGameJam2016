@@ -3,6 +3,8 @@ using System.Collections;
 
 public class BenProjectileSpawner : BenColored {
 
+    public bool beatSynced = false;
+
     public BenProjectile projectile;
     public float fireRate = 0.1f;
     float wait = 0;
@@ -27,10 +29,16 @@ public class BenProjectileSpawner : BenColored {
     [HideInInspector]
     public FrePlayerMovement player;
 
+    Color color;
+
 	// Use this for initialization
 	void Start () {
         if (isPlayer)
             player = GetComponent<FrePlayerMovement>();
+        else
+        {
+            color = BenColored.GetRGB(objectColor);
+        }
 
         rigid = GetComponent<Rigidbody2D>();
         pool = AutoPool.GetPool(projectile.gameObject, poolSize);
@@ -62,13 +70,15 @@ public class BenProjectileSpawner : BenColored {
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
 
-        if (fireing && (BenShip.instance.canFire && isPlayer || !isPlayer))
+        if (fireing && ((beatSynced && BeatManager.instance.beating) || !beatSynced) && ((BenShip.instance.canFire && isPlayer && BenShip.instance.CanUseAmmo(objectColor)) || !isPlayer))
         {
             Quaternion fromRot = transform.rotation;
             while (wait >= fireRate)
             {
+                
                 wait -= fireRate;
-
+                if (BenShip.instance.Shoot(this))
+                {
 				float angleOffset = -spread/2 + Random.Range(-randomSpread/2,randomSpread/2);
 
                 if (simultaneousProjectiles <= 1)
@@ -78,6 +88,8 @@ public class BenProjectileSpawner : BenColored {
                 {
                     BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
 
+                    if (!isPlayer)
+                        p.GetComponent<Renderer>().material.color = color;
                     transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
 
                     p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angleOffset + angle + Random.Range(-randomSpread, randomSpread) * Random.Range(0, 1f), objectColor, this);
@@ -87,9 +99,11 @@ public class BenProjectileSpawner : BenColored {
                         angleOffset += spread / (simultaneousProjectiles - 1);
                     
                 }
+
                 //InAudio.Play(gameObject, shootAudio);
 				if (isPlayer &&muzzle)
                     muzzle.Emit(5);
+                }
             }
 
             transform.rotation = fromRot;
@@ -97,7 +111,7 @@ public class BenProjectileSpawner : BenColored {
         
         wait += Time.deltaTime;
 
-        if (!fireing || (BenShip.instance.canFire && isPlayer))
+        if (!fireing || (!BenShip.instance.canFire && isPlayer) || (beatSynced && !BeatManager.instance.beating))
         {
             wait = Mathf.Clamp(wait, 0, fireRate);
         }
