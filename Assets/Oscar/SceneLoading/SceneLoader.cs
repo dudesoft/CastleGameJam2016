@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 //using UnityEditor;
 //#endif
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class SceneLoader : MonoBehaviour {
     public int CurrentSceneIndex;
     public int NextSceneIndex;
@@ -14,7 +13,9 @@ public class SceneLoader : MonoBehaviour {
     public bool UseButton = false;
     public string ButtonName = "Submit";
 
-    private SpriteRenderer progressBar;
+    public Canvas Canvas;
+    public UnityEngine.UI.Image ProgressBarLeft;
+    public UnityEngine.UI.Image ProgressBarRight;
 
     public float ProgressBarSpeed;
 
@@ -24,7 +25,7 @@ public class SceneLoader : MonoBehaviour {
 
     void Awake() {
         gameObject.tag = "SceneLoader";
-        progressBar = GetComponent<SpriteRenderer>();
+        //progressBar = GetComponent<SpriteRenderer>();
     }
 
     void Update() {
@@ -40,67 +41,110 @@ public class SceneLoader : MonoBehaviour {
     public void LoadScene() {        
         StartCoroutine(LoadSceneAsync());
     }
-
     private IEnumerator LoadSceneAsync() {
         // Trigger load end event
-        if(LoadStarted != null) {
+        if (LoadStarted != null) {
             LoadStarted();
-        }        
+        }
         AsyncOperation asyncOp = SceneManager.LoadSceneAsync(NextSceneIndex, LoadSceneMode.Additive);
         // Wait to activate scene until transition animations are done
         asyncOp.allowSceneActivation = false;
-
+        // Save reference to source scene main camera
         Camera originCam = Camera.main;
         originCam.tag = "Untagged";
-
-        // Progress animation        
-        float screenHeight = originCam.orthographicSize * 2;
-        float screenWidth = originCam.orthographicSize * 2 * originCam.aspect;
-        progressBar.transform.position = new Vector3(originCam.transform.position.x - screenWidth / 2.0f, originCam.transform.position.y, 0);
-        progressBar.transform.localScale = new Vector3(progressBar.transform.localScale.x, screenHeight, 1);
+        // Progress animation
+        RectTransform rectLeft = ProgressBarLeft.GetComponent<RectTransform>();
+        RectTransform rectRight = ProgressBarRight.GetComponent<RectTransform>();
         float scale = 0;
-        while (scale < screenWidth) {
-            if(asyncOp.progress < 0.9f) {
-                scale = Mathf.Min(screenWidth * asyncOp.progress, scale + ProgressBarSpeed * Time.deltaTime);
-            } else {
-                scale = scale + ProgressBarSpeed * Time.deltaTime;
-            }
-            // Change size of progress bar
-            progressBar.transform.localScale = new Vector3(scale, progressBar.transform.localScale.y, 1);
+        float halfWidth = Screen.width / 2.0f;
+        while (scale < halfWidth) {
+            scale = scale + ProgressBarSpeed * Time.deltaTime;
+            rectLeft.sizeDelta = new Vector2(scale, Screen.height);
+            rectRight.sizeDelta = new Vector2(scale, Screen.height);
             yield return null;
         }
         // Allow scene activation
         asyncOp.allowSceneActivation = true;
         yield return null;
-        // Disable camera
-        originCam.gameObject.SetActive(false);
-        // Adjust progress bar to new camera
-        Camera destCam = Camera.main;
-        screenHeight = destCam.orthographicSize * 2;
-        screenWidth = destCam.orthographicSize * 2 * destCam.aspect;
-        progressBar.transform.position = new Vector3(destCam.transform.position.x - screenWidth / 2.0f, destCam.transform.position.y, 0);
-        progressBar.transform.localScale = new Vector3(screenWidth, screenHeight, 1);
-
-
-
         // Trigger load end event
         if (LoadEnded != null) {
             LoadEnded();
         }
         // Load end animation
-        float offset = ProgressBarSpeed * Time.deltaTime;
-        float accumulated = 0;
-        while (accumulated < screenWidth) {
-            accumulated += offset;
-            screenHeight = destCam.orthographicSize * 2;
-            screenWidth = destCam.orthographicSize * 2 * destCam.aspect;
-            progressBar.transform.position = new Vector3(destCam.transform.position.x - screenWidth / 2.0f, destCam.transform.position.y, 0);
-            progressBar.transform.localScale = new Vector3(screenWidth, screenHeight, 1);
-            progressBar.transform.position += (Vector3.right * accumulated);
+        Camera destCam = Camera.main;
+        Canvas.worldCamera = destCam;
+        // Disable origin camera
+        originCam.gameObject.SetActive(false);
+        // Change pvot points
+        float offset = 0;
+        while (offset < halfWidth) {
+            offset = offset + ProgressBarSpeed * Time.deltaTime;
+            rectLeft.localPosition = new Vector3(-offset, 0, 0);
+            rectRight.localPosition = new Vector3(offset, 0, 0);
             yield return null;
         }
-        SceneManager.UnloadScene(CurrentSceneIndex);       
+        SceneManager.UnloadScene(CurrentSceneIndex);
     }
+    //private IEnumerator LoadSceneAsync() {
+    //    // Trigger load end event
+    //    if(LoadStarted != null) {
+    //        LoadStarted();
+    //    }        
+    //    AsyncOperation asyncOp = SceneManager.LoadSceneAsync(NextSceneIndex, LoadSceneMode.Additive);
+    //    // Wait to activate scene until transition animations are done
+    //    asyncOp.allowSceneActivation = false;
+
+    //    Camera originCam = Camera.main;
+    //    originCam.tag = "Untagged";
+
+    //    // Progress animation        
+    //    float screenHeight = originCam.orthographicSize * 2;
+    //    float screenWidth = originCam.orthographicSize * 2 * originCam.aspect;
+    //    progressBar.transform.position = new Vector3(originCam.transform.position.x - screenWidth / 2.0f, originCam.transform.position.y, 0);
+    //    progressBar.transform.localScale = new Vector3(progressBar.transform.localScale.x, screenHeight, 1);
+    //    float scale = 0;
+    //    while (scale < screenWidth) {
+    //        if(asyncOp.progress < 0.9f) {
+    //            scale = Mathf.Min(screenWidth * asyncOp.progress, scale + ProgressBarSpeed * Time.deltaTime);
+    //        } else {
+    //            scale = scale + ProgressBarSpeed * Time.deltaTime;
+    //        }
+    //        // Change size of progress bar
+    //        progressBar.transform.localScale = new Vector3(scale, progressBar.transform.localScale.y, 1);
+    //        yield return null;
+    //    }
+    //    // Allow scene activation
+    //    asyncOp.allowSceneActivation = true;
+    //    yield return null;
+    //    // Disable camera
+    //    originCam.gameObject.SetActive(false);
+    //    // Adjust progress bar to new camera
+    //    Camera destCam = Camera.main;
+    //    screenHeight = destCam.orthographicSize * 2;
+    //    screenWidth = destCam.orthographicSize * 2 * destCam.aspect;
+    //    progressBar.transform.position = new Vector3(destCam.transform.position.x - screenWidth / 2.0f, destCam.transform.position.y, 0);
+    //    progressBar.transform.localScale = new Vector3(screenWidth, screenHeight, 1);
+
+
+
+    //    // Trigger load end event
+    //    if (LoadEnded != null) {
+    //        LoadEnded();
+    //    }
+    //    // Load end animation
+    //    float offset = ProgressBarSpeed * Time.deltaTime;
+    //    float accumulated = 0;
+    //    while (accumulated < screenWidth) {
+    //        accumulated += offset;
+    //        screenHeight = destCam.orthographicSize * 2;
+    //        screenWidth = destCam.orthographicSize * 2 * destCam.aspect;
+    //        progressBar.transform.position = new Vector3(destCam.transform.position.x - screenWidth / 2.0f, destCam.transform.position.y, 0);
+    //        progressBar.transform.localScale = new Vector3(screenWidth, screenHeight, 1);
+    //        progressBar.transform.position += (Vector3.right * accumulated);
+    //        yield return null;
+    //    }
+    //    SceneManager.UnloadScene(CurrentSceneIndex);       
+    //}
 }
 
 //#if UNITY_EDITOR
