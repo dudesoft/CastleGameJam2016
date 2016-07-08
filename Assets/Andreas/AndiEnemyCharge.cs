@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 public class AndiEnemyCharge : FreBaseEnemy
 {
@@ -11,13 +11,33 @@ public class AndiEnemyCharge : FreBaseEnemy
     private Rigidbody2D rb;
     private bool triggerShot;
     public GameObject particleEmitter;
+    private int[] beatPattern;
     private ParticleSystem particleSystem;
 
     protected override void Init()
     {
+        beatPattern = createBeatPattern();
         stopLocation = new Vector2(0, 0);
         rb = GetComponent<Rigidbody2D>();
         particleSystem = particleEmitter.GetComponent<ParticleSystem>();
+    }
+
+    private int[] createBeatPattern()
+    {
+        int rnd = UnityEngine.Random.Range(0, 3);
+
+        switch(rnd)
+        {
+            case 0:
+                return new int[] { 1, 2, 3, 4 };
+            case 1:
+                return new int[] { 2, 3, 4, 1 };
+            case 2:
+                return new int[] { 3, 4, 1, 2 };
+            default:
+                return new int[] { 4, 1, 2, 3 };
+        }
+        
     }
 
     void Update()
@@ -25,9 +45,9 @@ public class AndiEnemyCharge : FreBaseEnemy
         Move();
     }
 
-    void TurnToTarget()
+    void Move()
     {
-        if (BeatManager.instance.beat < 3)
+        if (BeatManager.instance.beat == beatPattern[0] || BeatManager.instance.beat == beatPattern[1])
         {
             triggerShot = false;
             rb.velocity = new Vector2(0, 0);
@@ -37,28 +57,21 @@ public class AndiEnemyCharge : FreBaseEnemy
             Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
             transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 10);
         }
-        else if (BeatManager.instance.beat == 3)
+        else if (BeatManager.instance.beat == beatPattern[2])
         {
             if (BeatManager.instance.beating)
             {
                 particleSystem.Play();
             }
         }
-        else if (BeatManager.instance.beat == 4 && BeatManager.instance.beating)
+        else if (BeatManager.instance.beat == beatPattern[3] && BeatManager.instance.beating)
         {
             if (!triggerShot)
             {
                 triggerShot = true;
                 stopLocation = BenShip.instance.gameObject.transform.position;
-                rb.AddForce(transform.right * 15, ForceMode2D.Impulse);
+                rb.AddForce(transform.right * UnityEngine.Random.Range(13, 18), ForceMode2D.Impulse);
             }
         }
-    }
-
-    public virtual void Move()
-    {
-        TurnToTarget();
-
-        // rigidbody.velocity = transform.right * speed;
     }
 }
