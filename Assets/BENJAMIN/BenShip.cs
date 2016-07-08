@@ -96,28 +96,28 @@ public class BenShip : BenColored {
         }
 
 
-        float dist = 0;
+        //float dist = 0;
         toDestroy.Clear();
-        foreach (BenProjectile bp in BenProjectile.projectiles)
-        {
-            if (bp.objectColor == objectColor && bp.canHitPlayer)
-            {
-                dist = Vector3.Distance(bp.transform.position, transform.position);
-                if (dist < colliderDistance)
-                {
-                    //Player picked up a bullet
-                    PickUpAmmo(bp);
+        //foreach (BenProjectile bp in BenProjectile.projectiles)
+        //{
+        //    if (bp.objectColor == objectColor && bp.canHitPlayer)
+        //    {
+        //        dist = Vector3.Distance(bp.transform.position, transform.position);
+        //        if (dist < colliderDistance)
+        //        {
+        //            //Player picked up a bullet
+        //            PickUpAmmo(bp);
 
-                    toDestroy.Add(bp);
-                }
-                else if (dist < suckingDistance)
-                {
-                    bp.velocity -= (bp.transform.position - transform.position).normalized * (suckingPower * ((suckingDistance / 2) / dist));
-                    if (bp.velocity.magnitude > bp.speed)
-                        bp.velocity = bp.velocity.normalized * bp.speed * 1.2f;
-                }
-            }
-        }
+        //            toDestroy.Add(bp);
+        //        }
+        //        else if (dist < suckingDistance)
+        //        {
+        //            bp.velocity -= (bp.transform.position - transform.position).normalized * (suckingPower * ((suckingDistance / 2) / dist));
+        //            if (bp.velocity.magnitude > bp.speed)
+        //                bp.velocity = bp.velocity.normalized * bp.speed * 1.2f;
+        //        }
+        //    }
+        //}
         foreach (BenProjectile bp in toDestroy)
             bp.Destroy();
         
@@ -406,4 +406,8 @@ public class BenShip : BenColored {
             }
         }
     }
+
+    //void OnDestroy() {
+    //    toDestroy.Clear();
+    //}
 }

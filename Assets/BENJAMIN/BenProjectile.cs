@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class BenProjectile : BenColored {
 
 	// Use this for initialization
-    public static List<BenProjectile> projectiles = new List<BenProjectile>();
+    //public static List<BenProjectile> projectiles = new List<BenProjectile>();
     public InAudioNode impactSFX;
 
     public int damage = 1;
@@ -32,7 +32,7 @@ public class BenProjectile : BenColored {
         rigid.drag = dampen;
         this.origin = origin;
         ChangeColor(color);
-        projectiles.Add(this);
+        //projectiles.Add(this);
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         countdown = lifeTime;
         transform.position = position;
@@ -59,7 +59,7 @@ public class BenProjectile : BenColored {
     public void Destroy()
     {
 
-        projectiles.Remove(this);
+        //projectiles.Remove(this);
         //Destroy(gameObject);
         origin.pool.Release(gameObject);
     }
