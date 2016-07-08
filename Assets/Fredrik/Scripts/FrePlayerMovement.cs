@@ -24,6 +24,8 @@ public class FrePlayerMovement : MonoBehaviour {
     public Vector3 lookDirection;
     public float lookDistance = 0;
     public float maxLookDistance = 10;
+	float smallRumble;
+	float bigRumble;
 
 	public bool IsAiming()
 	{
@@ -34,9 +36,33 @@ public class FrePlayerMovement : MonoBehaviour {
 	void Start () {
 		rigbod = GetComponent<Rigidbody2D>();
 	}
+
+	void OnDisable()
+	{
+		GamePad.SetVibration(playerIndex,0,0);
+
+	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+
+
+		if(BeatManager.instance.beating)
+		{
+			if(BeatManager.instance.canTransform)
+			{
+				smallRumble = 1;
+				bigRumble = 1;
+			}
+			else
+				smallRumble = 0.6f;
+		}
+
+		smallRumble = Mathf.MoveTowards(smallRumble,0, Time.deltaTime *5);
+		bigRumble = Mathf.MoveTowards(bigRumble,0, Time.deltaTime *3);
+
+		GamePad.SetVibration(playerIndex,smallRumble,bigRumble);
+
 
 		Vector2 moveVec = Vector2.zero;
 		Vector2 aimVec = Vector2.zero;
@@ -67,7 +93,6 @@ public class FrePlayerMovement : MonoBehaviour {
 		switch(controller)
 		{
 		case ControlTypes.Gamepad:
-
 
 
 

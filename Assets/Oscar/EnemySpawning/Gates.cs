@@ -49,11 +49,12 @@ public class Gates : MonoBehaviour {
         closedTargetLeft = (Vector3)(Left.worldToLocalMatrix * CloseTarget) - (leftCollider.bounds.size.x * Vector3.right / 2.0f);
         closedTargetRight = (Vector3)(Right.worldToLocalMatrix * CloseTarget) + (rightCollider.bounds.size.x * Vector3.right / 2.0f);
         state = GateState.Open;
-        Close();
+       // Close();
     }    
 	
 	void OnTriggerEnter2D(Collider2D col) {
-        Close();
+		if(col.gameObject.tag == "Player")
+        	Close();
     }
 
     public void Close() {
