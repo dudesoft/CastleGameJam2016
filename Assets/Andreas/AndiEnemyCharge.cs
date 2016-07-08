@@ -9,12 +9,15 @@ public class AndiEnemyCharge : FreBaseEnemy
     private Vector2 stopLocation;
     private GameObject player;
     private Rigidbody2D rb;
-    private bool triggerShot; 
+    private bool triggerShot;
+    public GameObject particleEmitter;
+    private ParticleSystem particleSystem;
 
     protected override void Init()
     {
         stopLocation = new Vector2(0, 0);
         rb = GetComponent<Rigidbody2D>();
+        particleSystem = particleEmitter.GetComponent<ParticleSystem>();
     }
 
     void Update()
@@ -36,7 +39,10 @@ public class AndiEnemyCharge : FreBaseEnemy
         }
         else if (BeatManager.instance.beat == 3)
         {
-            // do fancy stuff
+            if (BeatManager.instance.beating)
+            {
+                particleSystem.Play();
+            }
         }
         else if (BeatManager.instance.beat == 4 && BeatManager.instance.beating)
         {

@@ -23,7 +23,7 @@ public class AmmoRing : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         ring.fillAmount = fill;
-        transform.localRotation = Quaternion.AngleAxis(fill * 360 / 2, Vector3.forward);
+        transform.localRotation = Quaternion.AngleAxis(fill * 360 / 2 + 180, Vector3.forward);
 
         if (Input.GetKeyDown(KeyCode.U))
         {

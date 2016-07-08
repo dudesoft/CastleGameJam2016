@@ -26,6 +26,14 @@ public class FrePlayerMovement : MonoBehaviour {
     public float maxLookDistance = 10;
 	float smallRumble;
 	float bigRumble;
+	bool dead = false;
+	public void DeadShake()
+	{
+		smallRumble = 1;
+		bigRumble = 1;
+		dead = true;
+	}
+
 
 	public bool IsAiming()
 	{
@@ -57,10 +65,16 @@ public class FrePlayerMovement : MonoBehaviour {
 			else
 				smallRumble = 0.6f;
 		}
-
-		smallRumble = Mathf.MoveTowards(smallRumble,0, Time.deltaTime *5);
-		bigRumble = Mathf.MoveTowards(bigRumble,0, Time.deltaTime *3);
-
+		if(dead)
+		{
+			smallRumble = Mathf.MoveTowards(smallRumble,0, Time.deltaTime );
+			bigRumble = Mathf.MoveTowards(bigRumble,0, Time.deltaTime );
+		}
+		else
+		{
+			smallRumble = Mathf.MoveTowards(smallRumble,0, Time.deltaTime *5);
+			bigRumble = Mathf.MoveTowards(bigRumble,0, Time.deltaTime *3);
+		}
 		GamePad.SetVibration(playerIndex,smallRumble,bigRumble);
 
 
