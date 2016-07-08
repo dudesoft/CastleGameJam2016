@@ -3,30 +3,31 @@ using System.Collections;
 
 public class FreSqrEnemy : FreBaseEnemy {
 
-	public GameObject target;
-	public float timeBetweenJumps;
+
+
 	public float jumpDistance;
-	float timeToNextJump;
-	float scale;
+
 	public float speed;
 	Vector2 goalPos;
 	// Use this for initialization
 	protected override void Init()
 	{
+//		BeatManager.instance.
 		goalPos =transform.position;
+	
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 
-		timeToNextJump += Time.deltaTime;
-		if(timeToNextJump > 0)
+	//	timeToNextJump += Time.deltaTime;
+		if(BeatManager.instance.beating)
 		{
-			timeToNextJump -= timeBetweenJumps;
+	//		timeToNextJump -= timeBetweenJumps;
 			scale = 1.5f;  
 
 			Vector2 posDifference;
-			posDifference =  target.transform.position-transform.position; 
+			posDifference =  playerObject.transform.position-transform.position; 
 			if(Mathf.Abs(posDifference.x) > Mathf.Abs(posDifference.y))
 			{
 				if(posDifference.x >0)
@@ -52,7 +53,7 @@ public class FreSqrEnemy : FreBaseEnemy {
 			}
 		}
 
-		scale = Mathf.MoveTowards(scale,1,Time.deltaTime*2);
+	//	scale = Mathf.MoveTowards(scale,1,Time.deltaTime*2);
 
 		transform.localScale = scale * Vector3.one;
 
