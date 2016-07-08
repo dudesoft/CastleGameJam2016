@@ -55,7 +55,7 @@ public class BeatManager : MonoBehaviour {
         beating = true;
         StartCoroutine(UnBeat());
 
-        if (beat == 3)
+        if (beat == 4)
         {
             canTransform = true;
             StartCoroutine(UnTransform());
@@ -77,11 +77,11 @@ public class BeatManager : MonoBehaviour {
     public float TimeToNextTransform()
     {
         float nextBeat = beatDuration - TimeSinceLastBeat;
-        if (beat == 1)
-            nextBeat += beatDuration;
         if (beat == 3)
+            nextBeat += beatDuration;
+        if (beat == 1)
             nextBeat += beatDuration * 3;
-        if (beat == 4)
+        if (beat == 2)
             nextBeat += beatDuration * 2;
         return nextBeat;
     }
