@@ -5,7 +5,7 @@ public class Gates : MonoBehaviour {
     public Transform Left;
     public Transform Right;
 
-    public Vector3 CloseTarget;
+    public Vector3 ClosedTarget;
 
     private Vector3 openTargetLeft;
     private Vector3 openTargetRight;
@@ -46,8 +46,11 @@ public class Gates : MonoBehaviour {
         openTargetLeft = Left.localPosition;
         openTargetRight = Right.localPosition;
         // Calculate right and left close targets
-        closedTargetLeft = (Vector3)(Left.worldToLocalMatrix * CloseTarget) - (leftCollider.bounds.size.x * Vector3.right / 2.0f);
-        closedTargetRight = (Vector3)(Right.worldToLocalMatrix * CloseTarget) + (rightCollider.bounds.size.x * Vector3.right / 2.0f);
+        closedTargetLeft = (Vector3)(Left.InverseTransformPoint(transform.TransformPoint(ClosedTarget))) - (leftCollider.bounds.size.x * Vector3.right / 2.0f);
+        closedTargetLeft += ClosedTarget;
+        closedTargetRight = (Vector3)(Right.InverseTransformPoint(transform.TransformPoint(ClosedTarget))) + (rightCollider.bounds.size.x * Vector3.right / 2.0f);
+        closedTargetRight += ClosedTarget;
+        Debug.Log("Left " + closedTargetLeft + " Right " + closedTargetRight);
         state = GateState.Open;
        // Close();
     }    
@@ -59,11 +62,7 @@ public class Gates : MonoBehaviour {
 
     public void Close() {
         if(state == GateState.Open) {
-            //Left.localPosition = leftCloseTarget;
-            //Right.localPosition = rightCloseTarget;
-            //open = false;
-            StartCoroutine(CloseAnim());  
-
+            StartCoroutine(CloseAnim());
         }
     }
     private IEnumerator CloseAnim() {
@@ -100,13 +99,8 @@ public class Gates : MonoBehaviour {
 
     public void Open() {
         if(state == GateState.Closed) {
-            //Left.localPosition = openTargetLeft;
-            //Right.localPosition = openTargetRight;
-            //open = true;
             StartCoroutine(OpenAnim());
-
         }
-
     }
 
     private IEnumerator OpenAnim() {
@@ -143,6 +137,7 @@ public class Gates : MonoBehaviour {
 
     void OnDrawGizmos() {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(CloseTarget, 0.2f);
+        Vector3 pos = transform.TransformPoint(ClosedTarget);
+        Gizmos.DrawWireSphere(pos, 0.2f);
     }
 }
