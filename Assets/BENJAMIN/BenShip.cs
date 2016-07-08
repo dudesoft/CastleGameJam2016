@@ -54,20 +54,30 @@ public class BenShip : BenColored {
         }
 
         if (Input.GetButtonDown("Red"))
+        {
             nextTransform = ObjectColor.Red;
-
-		if (Input.GetButtonDown("Green"))
-            nextTransform = ObjectColor.Green;
-
-		if (Input.GetButtonDown("Blue"))
-            nextTransform = ObjectColor.Blue;
-
-		if (Input.GetButtonDown("Yellow"))
-            nextTransform = ObjectColor.Yellow;
-
-        if (nextTransform != objectColor)
             TransformCharge.instance.QueueColor(nextTransform);
-
+            SFX.QueueColor();
+        }
+        if (Input.GetButtonDown("Green"))
+        {
+            nextTransform = ObjectColor.Green;
+            TransformCharge.instance.QueueColor(nextTransform);
+            SFX.QueueColor();
+        }
+        if (Input.GetButtonDown("Blue"))
+        {
+            nextTransform = ObjectColor.Blue;
+            TransformCharge.instance.QueueColor(nextTransform);
+            SFX.QueueColor();
+        }
+        if (Input.GetButtonDown("Yellow"))
+        {
+            nextTransform = ObjectColor.Yellow;
+            TransformCharge.instance.QueueColor(nextTransform);
+            SFX.QueueColor();
+        }
+        
         if (BeatManager.instance.canTransform && nextTransform != objectColor)
         {
             ChangeShipColor(nextTransform);
@@ -156,7 +166,12 @@ public class BenShip : BenColored {
             return true;
         }
         else
+        {
+            SFX.NoAmmo();
+            AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.UpdateAmmo();
             return false;
+        }
     }
 
     public void PickUpAmmo(BenProjectile p)
@@ -270,6 +285,7 @@ public class BenShip : BenColored {
     {
         if (objectColor != color)
         {
+            SFX.Transform();
             DoTransformation(color);
             if (currentGun != null)
                 currentGun.enabled = false;

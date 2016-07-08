@@ -6,6 +6,7 @@ public class BenProjectile : BenColored {
 
 	// Use this for initialization
     public static List<BenProjectile> projectiles = new List<BenProjectile>();
+    public InAudioNode impactSFX;
 
     public int damage = 1;
     public int ammoValue = 1;
@@ -65,12 +66,13 @@ public class BenProjectile : BenColored {
 
     public void Impact(Vector3 pos)
     {
+        SFX.Play(impactSFX);
         if (origin.bulletImpact) {
             origin.bulletImpact.startColor = Color.Lerp(Color.white, BenColored.GetRGB(objectColor), 0.33f);
             origin.bulletImpact.transform.position = pos;
             origin.bulletImpact.Emit(3);
         }        
-        //InAudio.PlayAtPosition(origin.gameObject, origin.bulletImpactAudio, pos);
+        
         Destroy();
     }
 

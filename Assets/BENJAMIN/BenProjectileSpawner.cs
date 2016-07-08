@@ -8,6 +8,7 @@ public class BenProjectileSpawner : BenColored {
     public List<int> shootingBeats;
 
     public BenProjectile projectile;
+    public InAudioNode shootSFX;
     public float fireRate = 0.1f;
     float wait = 0;
     public float fireDistance = 0.25f;
@@ -73,51 +74,56 @@ public class BenProjectileSpawner : BenColored {
         
 
 
-        if (fireing && ((beatSynced && BeatManager.instance.beating) || (!beatSynced && shootingBeats.Contains(BeatManager.instance.beat))) && ((BenShip.instance.canFire && isPlayer && BenShip.instance.CanUseAmmo(objectColor)) || !isPlayer))
+        if (fireing && ((beatSynced && BeatManager.instance.beating) || 
+            (!beatSynced && shootingBeats.Contains(BeatManager.instance.beat))) && ((BenShip.instance.canFire && isPlayer/* && BenShip.instance.CanUseAmmo(objectColor)*/) || !isPlayer))
         {
             Quaternion fromRot = transform.rotation;
             while (wait >= fireRate)
             {
-                
+
                 wait -= fireRate;
                 if (BenShip.instance.Shoot(this))
                 {
-				float angleOffset = -spread/2 + Random.Range(-randomSpread/2,randomSpread/2);
+                    SFX.Play(shootSFX);
+                    float angleOffset = -spread / 2 + Random.Range(-randomSpread / 2, randomSpread / 2);
 
-                if (simultaneousProjectiles <= 1)
-					angleOffset = Random.Range(-randomSpread/2,randomSpread/2);
+                    if (simultaneousProjectiles <= 1)
+                        angleOffset = Random.Range(-randomSpread / 2, randomSpread / 2);
 
-                for (int i = 0; i < simultaneousProjectiles; i++)
-                {
-                    BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
+                    for (int i = 0; i < simultaneousProjectiles; i++)
+                    {
+                        BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
 
-                    if (!isPlayer)
-                        p.GetComponent<Renderer>().material.color = color;
-                    transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
+                        if (!isPlayer)
+                            p.GetComponent<Renderer>().material.color = color;
+                        transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
 
-                    p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angleOffset + angle + Random.Range(-randomSpread, randomSpread) * Random.Range(0, 1f), objectColor, this);
-                    p.gameObject.SetActive(true);
+                        p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angleOffset + angle + Random.Range(-randomSpread, randomSpread) * Random.Range(0, 1f), objectColor, this);
+                        p.gameObject.SetActive(true);
 
-                    if (simultaneousProjectiles > 1)
-                        angleOffset += spread / (simultaneousProjectiles - 1);
-                    
-                }
+                        if (simultaneousProjectiles > 1)
+                            angleOffset += spread / (simultaneousProjectiles - 1);
 
-                //InAudio.Play(gameObject, shootAudio);
-				if (isPlayer &&muzzle)
-                    muzzle.Emit(5);
+                    }
+
+                    //InAudio.Play(gameObject, shootAudio);
+                    if (isPlayer && muzzle)
+                        muzzle.Emit(5);
                 }
             }
 
             transform.rotation = fromRot;
         }
         
-        wait += Time.deltaTime;
-
-        if (!fireing || (!BenShip.instance.canFire && isPlayer) || (beatSynced && !BeatManager.instance.beating))
+        else
+        //if (!fireing || (!BenShip.instance.canFire && isPlayer) || (beatSynced && !BeatManager.instance.beating))
         {
             wait = Mathf.Clamp(wait, 0, fireRate);
         }
+        
+        wait += Time.deltaTime;
+
+        
         
 	}
 }
