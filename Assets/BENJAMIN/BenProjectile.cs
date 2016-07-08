@@ -66,7 +66,7 @@ public class BenProjectile : BenColored {
 
     public void Impact(Vector3 pos)
     {
-        SFX.Play(impactSFX);
+ //       SFX.Play(impactSFX);
         if (origin.bulletImpact) {
             origin.bulletImpact.startColor = Color.Lerp(Color.white, BenColored.GetRGB(objectColor), 0.33f);
             origin.bulletImpact.transform.position = pos;
@@ -91,7 +91,6 @@ public class BenProjectile : BenColored {
 
         if (col.gameObject.CompareTag("Enemy") && canHitEnemy)
         {
-			print("whaaa");
 			col.GetComponent<FreBaseEnemy>().DealDamage(damage);
             Impact(transform.position);
         }
