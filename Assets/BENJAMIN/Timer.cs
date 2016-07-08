@@ -63,8 +63,8 @@ public class Timer : MonoBehaviour
     {
         counting = false;
         //Score screen stuff here
-
+        Application.LoadLevelAdditive(2);
         //load score screen
-
+        ScoreScreen.instance.EnterScoreScreen(hours, minutes, seconds, milliseconds, (int)(time*1000), Deaths, Style);
     }
 }
