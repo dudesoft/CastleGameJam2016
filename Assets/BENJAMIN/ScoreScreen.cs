@@ -19,7 +19,6 @@ public class ScoreScreen : MonoBehaviour
 	void Awake () 
     {
         instance = this;
-        EnterScoreScreen(0, 3, 43, 74, 12494, 4, 350);
 	}
 	
 	public void EnterScoreScreen(int hours, int minutes, int seconds, int ms, int totalms, int deaths, int styles)
@@ -35,19 +34,26 @@ public class ScoreScreen : MonoBehaviour
     {
         LeanTween.color(bg.GetComponent<RectTransform>(), Color.black, 1);
 
-        yield return new WaitForSeconds(1.5f);
+        while (!BeatManager.instance.canTransform)
+            yield return null;
 
         timeScore.text = (hours > 0 ? (hours + ":") : "") + minutes + ":" + seconds + ":" + ms;
-
-        yield return new WaitForSeconds(0.5f);
-
+        yield return null;
+        
+        while (!BeatManager.instance.canTransform)
+            yield return null;
+        
         deathScore.text = deaths + "";
+        yield return null;
 
-        yield return new WaitForSeconds(0.5f);
-
+        while (!BeatManager.instance.canTransform)
+            yield return null;
+        
         styleScore.text = styles + "";
+        yield return null;
 
-        yield return new WaitForSeconds(1f);
+        while (!BeatManager.instance.canTransform)
+            yield return null;
 
         complete.text = "";
         time.text = "";
@@ -57,17 +63,23 @@ public class ScoreScreen : MonoBehaviour
         timeScore.text = "";
         deathScore.text = "";
         styleScore.text = "";
+        yield return null;
 
-        yield return new WaitForSeconds(0.5f);
+        while (!BeatManager.instance.canTransform)
+            yield return null;
         complete.text = "SCORE:";
+        yield return null;
 
-        yield return new WaitForSeconds(0.5f);
+        while (!BeatManager.instance.canTransform)
+            yield return null;
         scoreText.text = score + "";
+        yield return null;
 
-        yield return new WaitForSeconds(1f);
+        while (!BeatManager.instance.canTransform)
+            yield return null;
         gradeScore.text = grade;
 
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(12);
 
         Application.LoadLevel(0);
     }
