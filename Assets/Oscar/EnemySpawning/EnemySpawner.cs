@@ -44,8 +44,11 @@ public class EnemySpawner : MonoBehaviour {
 
     //public float unitSpacing;
 
+    public ParticleSystem enemyExplosion;
+
     protected void Awake () {
         tag = "EnemySpawner";
+        enemyExplosion = ((GameObject)Instantiate(Resources.Load("EnemyExplosion"))).GetComponent<ParticleSystem>();
         // Initialize pools
         // Create one pool per enemy prefab
         pools = new Dictionary<System.Type, Pool>(enemyPrefabs.Count);
@@ -113,6 +116,12 @@ public class EnemySpawner : MonoBehaviour {
     }
 
     protected void HandleDeadEnemy(FreBaseEnemy enemy) {
+        //Show effects
+        BenPlayerCamera.instance.ScreenShake(2f, 0.5f);
+        enemyExplosion.transform.position = enemy.transform.position;
+        enemyExplosion.Emit(10);
+        SFX.EnemyDeath();
+
         // Unsubscribe from death event
         enemy.Died -= HandleDeadEnemy;
         // Find pool and release object

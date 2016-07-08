@@ -12,6 +12,7 @@ public class FreBaseEnemy : BenColored {
 	public delegate void EnemyDiedEventHandler(FreBaseEnemy enemy);
 	public event EnemyDiedEventHandler Died;
 	protected float scale = 1.5f;
+    private Vector3 size;
 
 	Color enemyColor;
 	SpriteRenderer spr;
@@ -25,6 +26,7 @@ public class FreBaseEnemy : BenColored {
 		tag = "Enemy";
 		spr = GetComponent<SpriteRenderer>();
 		UpdateColor();
+        size = transform.localScale;
 	}
 
 	void OnEnable()
@@ -35,7 +37,7 @@ public class FreBaseEnemy : BenColored {
 
 	protected virtual void Init()
 	{
-
+        
 	}
 	// Update is called once per frame
 	void LateUpdate () {
@@ -47,10 +49,16 @@ public class FreBaseEnemy : BenColored {
 		
 	public void DealDamage(int damage)
 	{
+        spr.color = Color.white;
+        enemyColor = Color.white;
+
+        transform.localScale = size * 1.2f;
+        LeanTween.scale(gameObject, size, 0.4f);
+
 		hitFlash=true;
 		curentHealth -= damage;
 		scale = 0.9f;
-		print(curentHealth);
+		//print(curentHealth);
 		if(curentHealth <= 0)
 		{
 			EnemyDies();
@@ -67,8 +75,8 @@ public class FreBaseEnemy : BenColored {
 	{
 		enemyColor = Color.Lerp(enemyColor, BenColored.GetRGB(objectColor),Time.deltaTime*5);
 
-		if(hitFlash)
-			enemyColor.a =0.1f;
+		//if(hitFlash)
+		//	enemyColor.a =0.1f;
 
 		hitFlash = false;
 		spr.color = enemyColor;
