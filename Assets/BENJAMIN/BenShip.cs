@@ -69,25 +69,25 @@ public class BenShip : BenColored {
         {
             nextTransform = ObjectColor.Red;
             TransformCharge.instance.QueueColor(nextTransform);
-            SFX.QueueColor();
+            
         }
         if (Input.GetButtonDown("Green"))
         {
             nextTransform = ObjectColor.Green;
             TransformCharge.instance.QueueColor(nextTransform);
-            SFX.QueueColor();
+            
         }
         if (Input.GetButtonDown("Blue"))
         {
             nextTransform = ObjectColor.Blue;
             TransformCharge.instance.QueueColor(nextTransform);
-            SFX.QueueColor();
+            
         }
         if (Input.GetButtonDown("Yellow"))
         {
             nextTransform = ObjectColor.Yellow;
             TransformCharge.instance.QueueColor(nextTransform);
-            SFX.QueueColor();
+            
         }
         
         if (BeatManager.instance.canTransform && nextTransform != objectColor)

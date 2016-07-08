@@ -10,6 +10,7 @@ public class TransformCharge : MonoBehaviour
     public static TransformCharge instance;
     public float lowAlpha, highAlpha;
     bool queued = false;
+    public ParticleSystem style;
 
 	// Use this for initialization
 	void Awake () {
@@ -49,8 +50,35 @@ public class TransformCharge : MonoBehaviour
 
         if (!queued)
         {
+            
+            if (BeatManager.instance.TimeToNextTransform() < BeatManager.instance.beatDuration + 0.02f)
+            {
+                SFX.QueueColor();
+                if (color != BenShip.instance.currentGun.objectColor)
+                {
+                    //Stylish
+                    Timer.Style += 10;
+                    style.transform.position = BenShip.instance.transform.position;
+                    style.Emit(1);
+                }
+                //Trigger niceness
+            }
+            else if (BeatManager.instance.TimeToNextTransform() < 0.5f)
+            {
+                //nothing
+                SFX.QueueBadColor();
+            }
+            else if (BeatManager.instance.TimeToNextTransform() > 1f)
+            {
+                Timer.Style -= 1;
+                SFX.QueueBadColor();
+            }
             //if close add 10 styles, else remove 1
             //also enemy deaths = 1 style
+        }
+        else
+        {
+            SFX.QueueBadColor();
         }
 
         queued = true;

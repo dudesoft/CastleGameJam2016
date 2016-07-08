@@ -6,7 +6,7 @@ public class SFX : MonoBehaviour {
 
     private static SFX instance;
 
-    public InAudioNode TransformShip, noAmmo, impactSFX, queueColor, playerDeath, respawn, enemyDeath;
+    public InAudioNode TransformShip, noAmmo, impactSFX, queueColor, playerDeath, respawn, enemyDeath, queueBadColor;
 
     public AudioMixer effectedMixer;
 
@@ -29,6 +29,11 @@ public class SFX : MonoBehaviour {
     public static void QueueColor()
     {
         InAudio.Play(instance.gameObject, instance.queueColor);
+    }
+
+    public static void QueueBadColor()
+    {
+        InAudio.Play(instance.gameObject, instance.queueBadColor);
     }
 
     public static void Play(InAudioNode node)

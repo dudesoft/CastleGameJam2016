@@ -17,6 +17,11 @@ public class Timer : MonoBehaviour
         mesh1 = GetComponent<TextMesh>();
 	}
 
+    void Start()
+    {
+        StartGame();
+    }
+
     float time = 0;
 
     int hours, minutes, seconds, milliseconds;
