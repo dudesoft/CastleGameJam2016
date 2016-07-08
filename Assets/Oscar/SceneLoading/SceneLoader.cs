@@ -38,6 +38,12 @@ public class SceneLoader : MonoBehaviour {
         }        
     }
 
+    void OnTriggerEnter2D(Collider2D col) {
+        if(col.tag == "Player") {
+            LoadScene();
+        }
+    }
+
     public void LoadScene() {        
         StartCoroutine(LoadSceneAsync());
     }
