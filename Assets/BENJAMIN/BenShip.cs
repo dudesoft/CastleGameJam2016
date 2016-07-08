@@ -37,7 +37,11 @@ public class BenShip : BenColored {
     public int TransformBlueAmmoRefill;
     public int TransformYellowAmmoRefill;
 
+    public int MaxHealth;
+    private int health;
 
+    private bool invulnerable;
+    public float InvulnerableTime;
 
     // Use this for initialization
     void Start () {
@@ -45,6 +49,7 @@ public class BenShip : BenColored {
         currentGun = redGun;
         playerGO = gameObject;
         instance = this;
+        health = MaxHealth;
         ChangeShipColor(ObjectColor.Red);
 	}
 	
@@ -379,7 +384,33 @@ public class BenShip : BenColored {
         revive.transform.position = transform.position;
         revive.Emit(40);
         Destroy(revive.gameObject, 3);
+
+        // Restore health and become invulnerable
+        health = MaxHealth;
+        invulnerable = true;
+
         SFX.Respawn();
         BenShip.instance.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(InvulnerableTime);
+        invulnerable = false;
+    }
+
+    void OnTriggerEnter2D(Collider2D col) {
+        if(!invulnerable && (col.tag == "Enemy" || (col.tag == "Projectile" && col.GetComponent<BenProjectile>().canHitPlayer))) {
+            health--;
+            if(health == 0) {
+                Die();
+            }
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D col) {
+        if (!invulnerable &&(col.collider.tag == "Enemy" || (col.collider.tag == "Projectile" && col.collider.GetComponent<BenProjectile>().canHitPlayer))) {
+            health--;
+            if (health == 0) {
+                Die();
+            }
+        }
     }
 }

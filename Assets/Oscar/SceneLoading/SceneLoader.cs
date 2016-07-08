@@ -24,6 +24,8 @@ public class SceneLoader : MonoBehaviour {
     public event LoadEventHandler LoadStarted;
     public event LoadEventHandler LoadEnded;
 
+    private bool loading = false;
+
     void Awake() {
         gameObject.tag = "SceneLoader";
         //progressBar = GetComponent<SpriteRenderer>();
@@ -40,7 +42,7 @@ public class SceneLoader : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(col.tag == "Player") {
+        if(col.tag == "Player" && !loading) {
             LoadScene();
         }
     }
@@ -49,6 +51,7 @@ public class SceneLoader : MonoBehaviour {
         StartCoroutine(LoadSceneAsync());
     }
     private IEnumerator LoadSceneAsync() {
+        loading = true;
         // Trigger load end event
         if (LoadStarted != null) {
             LoadStarted();
