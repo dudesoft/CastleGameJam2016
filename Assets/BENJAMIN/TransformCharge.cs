@@ -27,7 +27,7 @@ public class TransformCharge : MonoBehaviour
             //mat.SetColor("_TintColor", noQueueColor);
             this.color = Color.white;
             queued = false;
-            Debug.Log("Charge");
+            //Debug.Log("Charge");
         }
 
         c = color;
