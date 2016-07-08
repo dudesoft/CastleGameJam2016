@@ -13,6 +13,7 @@ public class SceneLoader : MonoBehaviour {
     public bool UseButton = false;
     public string ButtonName = "Submit";
 
+    public GameObject SceneToHide;
     public Canvas Canvas;
     public UnityEngine.UI.Image ProgressBarLeft;
     public UnityEngine.UI.Image ProgressBarRight;
@@ -71,6 +72,7 @@ public class SceneLoader : MonoBehaviour {
         }
         // Allow scene activation
         asyncOp.allowSceneActivation = true;
+        SceneToHide.SetActive(false);
         yield return null;
         // Trigger load end event
         if (LoadEnded != null) {
@@ -78,7 +80,6 @@ public class SceneLoader : MonoBehaviour {
         }
         // Load end animation
         Camera destCam = Camera.main;
-        Canvas.worldCamera = destCam;
         // Disable origin camera
         originCam.gameObject.SetActive(false);
         // Change pvot points
