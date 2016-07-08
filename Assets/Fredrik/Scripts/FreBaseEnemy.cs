@@ -22,6 +22,7 @@ public class FreBaseEnemy : BenColored {
 		{
 			playerObject = (FrePlayerMovement) FindObjectOfType<FrePlayerMovement>();
 		}
+		tag = "Enemy";
 		spr = GetComponent<SpriteRenderer>();
 		UpdateColor();
 	}
