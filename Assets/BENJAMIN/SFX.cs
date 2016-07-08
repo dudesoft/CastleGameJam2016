@@ -42,6 +42,11 @@ public class SFX : MonoBehaviour {
         instance.effectedMixer.FindSnapshot("Dead").TransitionTo(0);
     }
 
+    public static void Respawn()
+    {
+        InAudio.Play(instance.gameObject, instance.respawn);
+    }
+
     public static void ReviveSnapshot()
     {
         instance.effectedMixer.FindSnapshot("Alive").TransitionTo(1f);

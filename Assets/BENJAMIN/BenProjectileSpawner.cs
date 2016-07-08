@@ -82,7 +82,7 @@ public class BenProjectileSpawner : BenColored {
             {
 
                 wait -= fireRate;
-                if (BenShip.instance.Shoot(this))
+				if (BenShip.instance.Shoot(this) || !isPlayer)
                 {
                     SFX.Play(shootSFX);
                     float angleOffset = -spread / 2 + Random.Range(-randomSpread / 2, randomSpread / 2);

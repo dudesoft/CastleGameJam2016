@@ -357,19 +357,29 @@ public class BenShip : BenColored {
     public void Die()
     {
         BeatManager.instance.StartCoroutine(PlayerDeath());
+        BenPlayerCamera.instance.ScreenShake(15, 2f);
     }
 
     IEnumerator PlayerDeath()
     {
         BenShip.instance.gameObject.SetActive(false);
         ParticleSystem explosion = ((GameObject)Instantiate(Resources.Load("Explosion"))).GetComponent<ParticleSystem>();
+        ParticleSystem prepareRevive = ((GameObject)Instantiate(Resources.Load("Prepare Revive"))).GetComponent<ParticleSystem>();
+        ParticleSystem revive = ((GameObject)Instantiate(Resources.Load("Revive"))).GetComponent<ParticleSystem>();
         explosion.transform.position = transform.position;
         explosion.Play();
+        prepareRevive.transform.position = transform.position;
+        prepareRevive.Play();
         SFX.PlayerDeath();
         
         Destroy(explosion.gameObject, 8);
+        Destroy(prepareRevive.gameObject, 4);
         yield return new WaitForSeconds(3);
         SFX.ReviveSnapshot();
+        revive.transform.position = transform.position;
+        revive.Emit(40);
+        Destroy(revive.gameObject, 3);
+        SFX.Respawn();
         BenShip.instance.gameObject.SetActive(true);
     }
 }

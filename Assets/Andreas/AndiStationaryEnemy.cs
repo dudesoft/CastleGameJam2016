@@ -10,8 +10,8 @@ public class AndiStationaryEnemy : FreBaseEnemy
 
     void Update()
     {
-        float sine = Mathf.Abs(Mathf.Sin(Time.time * 10)) - 0.5f;
-        float cosine = Mathf.Abs(Mathf.Cos(Time.time * 10)) - 0.5f;
+        float sine = Mathf.Abs(Mathf.Sin(BeatManager.instance.TimeSinceLastBeat * Mathf.PI)) - 0.5f;
+        float cosine = Mathf.Abs(Mathf.Cos(BeatManager.instance.TimeSinceLastBeat * Mathf.PI)) - 0.5f;
         centerObject.GetComponent<SpriteRenderer>().color = new Color(1, sine, sine);
 
         centerObject.transform.Rotate(new Vector3(0, 0, -3));
