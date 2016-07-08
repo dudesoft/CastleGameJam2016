@@ -95,15 +95,6 @@ public class BenShip : BenColored {
             ChangeShipColor(nextTransform);
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            RefillAmmo();
-        }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Die();
-        }
 
         float dist = 0;
         toDestroy.Clear();
@@ -361,8 +352,10 @@ public class BenShip : BenColored {
 
     public void Die()
     {
+		GetComponent<FrePlayerMovement>().DeadShake();
         BeatManager.instance.StartCoroutine(PlayerDeath());
         BenPlayerCamera.instance.ScreenShake(15, 2f);
+
     }
 
     IEnumerator PlayerDeath()
