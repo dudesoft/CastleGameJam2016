@@ -20,35 +20,12 @@ public class EnemySpawner : MonoBehaviour {
     [SerializeField]
     private int poolStartSize;
 
-    // Testing
-    //public enum SpawnPattern {
-    //    Point,
-    //    Line,
-    //    Circle,
-    //    Unit
-    //}
-    //public SpawnPattern Pattern;
-
-    //public Rect SpawningArea;
-
-    //public int minSpawnerEnemies;
-    //public int maxSpawnerEnemies;
-    //public float minSpawnerPeriod;
-    //public float maxSpawnerPeriod;
-
-    //public float minSpawnerRadius;
-    //public float maxSpawnerRadius;
-
-    //public int minSpawnerRows;
-    //public int maxSpawnerRows;
-
-    //public float unitSpacing;
 
     public ParticleSystem enemyExplosion;
 
     protected void Awake () {
         tag = "EnemySpawner";
-        enemyExplosion = ((GameObject)Instantiate(Resources.Load("EnemyExplosion"))).GetComponent<ParticleSystem>();
+        //enemyExplosion = ((GameObject)Instantiate(Resources.Load("EnemyExplosion"))).GetComponent<ParticleSystem>();
         // Initialize pools
         // Create one pool per enemy prefab
         pools = new Dictionary<System.Type, Pool>(enemyPrefabs.Count);
