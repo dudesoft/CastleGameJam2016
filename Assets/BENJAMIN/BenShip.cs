@@ -390,7 +390,7 @@ public class BenShip : BenColored {
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(!invulnerable && (col.tag == "Enemy" || (col.tag == "Projectile" && col.GetComponent<BenProjectile>().canHitPlayer))) {
+        if(!invulnerable && (col.tag == "Enemy" || (col.tag == "Bullet" && col.GetComponent<BenProjectile>().canHitPlayer))) {
             health--;
             if(health == 0) {
                 Die();
@@ -399,7 +399,7 @@ public class BenShip : BenColored {
     }
 
     void OnCollisionEnter2D(Collision2D col) {
-        if (!invulnerable &&(col.collider.tag == "Enemy" || (col.collider.tag == "Projectile" && col.collider.GetComponent<BenProjectile>().canHitPlayer))) {
+        if (!invulnerable &&(col.collider.tag == "Enemy" || (col.collider.tag == "Bullet" && col.collider.GetComponent<BenProjectile>().canHitPlayer))) {
             health--;
             if (health == 0) {
                 Die();
