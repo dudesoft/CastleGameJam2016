@@ -80,8 +80,9 @@ public class SceneLoader : MonoBehaviour {
         }
         // Load end animation
         Camera destCam = Camera.main;
+        Canvas.worldCamera = destCam;
         // Disable origin camera
-        originCam.gameObject.SetActive(false);
+        //originCam.gameObject.SetActive(false);
         // Change pvot points
         float offset = 0;
         while (offset < halfWidth) {
