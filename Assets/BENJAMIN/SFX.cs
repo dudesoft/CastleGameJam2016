@@ -6,11 +6,9 @@ public class SFX : MonoBehaviour {
 
     private static SFX instance;
 
-    public InAudioNode TransformShip, noAmmo, impactSFX, queueColor, playerDeath, respawn;
+    public InAudioNode TransformShip, noAmmo, impactSFX, queueColor, playerDeath, respawn, enemyDeath;
 
     public AudioMixer effectedMixer;
-
-    public AudioMixerSnapshot alive, dead;
 
 	// Use this for initialization
 	void Awake () {
@@ -47,5 +45,10 @@ public class SFX : MonoBehaviour {
     public static void ReviveSnapshot()
     {
         instance.effectedMixer.FindSnapshot("Alive").TransitionTo(1f);
+    }
+
+    public static void EnemyDeath()
+    {
+        InAudio.Play(instance.gameObject, instance.enemyDeath);
     }
 }

@@ -14,6 +14,7 @@ public class BenPlayerCamera : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
+        instance = this;
         camera = GetComponent<Camera>();
 	}
 
