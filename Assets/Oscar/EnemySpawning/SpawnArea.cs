@@ -14,6 +14,13 @@ public class SpawnArea: MonoBehaviour {
     public SpawnPattern Pattern;
 
     public int EnemyPrefabIndex;
+    public enum WaveColor {
+        Predefined,
+        PlayerColor,
+        NotPlayerColor,
+        Random
+    }
+    public WaveColor WaveColorMode;
     public ObjectColor EnemyColor;
 
     [Tooltip("Not used by Unit pattern.")]
@@ -56,6 +63,9 @@ public class SpawnArea: MonoBehaviour {
     // Time based area type
     public float Delay;
 
+    
+    private BenShip player;
+
     void Start() {
         spawner = GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawner>();
         // Subscribe to preceding waves        
@@ -65,6 +75,10 @@ public class SpawnArea: MonoBehaviour {
                 sa.WaveCleared += UpdatePrecedingCount;
             }               
         }
+        if(WaveColorMode == WaveColor.Random) {
+            EnemyColor = (ObjectColor)Random.Range(0, System.Enum.GetNames(typeof(ObjectColor)).Length - 1);
+        }
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<BenShip>();
     }
 
     void OnTriggerEnter2D(Collider2D col) {
@@ -125,6 +139,11 @@ public class SpawnArea: MonoBehaviour {
 
 
     void TriggerSpawning() {
+        if(WaveColorMode == WaveColor.PlayerColor) {
+            EnemyColor = player.objectColor;
+        } else if(WaveColorMode == WaveColor.NotPlayerColor) {
+            EnemyColor = (ObjectColor)(((int)player.objectColor + Random.Range(1, System.Enum.GetNames(typeof(ObjectColor)).Length - 1)) % System.Enum.GetNames(typeof(ObjectColor)).Length);
+        }
         switch (Pattern) {
             case SpawnPattern.Point:
                 StartCoroutine(spawner.PointSpawner(transform.position, EnemyAmount, Period, EnemyPrefabIndex, EnemyColor, WaveStateUpdater));
