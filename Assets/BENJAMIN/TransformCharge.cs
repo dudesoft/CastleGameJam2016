@@ -25,8 +25,9 @@ public class TransformCharge : MonoBehaviour
         if (BeatManager.instance.canTransform)
         {
             //mat.SetColor("_TintColor", noQueueColor);
-            color = Color.white;
+            this.color = Color.white;
             queued = false;
+            Debug.Log("Charge");
         }
 
         c = color;

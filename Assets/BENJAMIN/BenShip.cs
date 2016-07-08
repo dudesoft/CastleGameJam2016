@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -54,20 +55,30 @@ public class BenShip : BenColored {
         }
 
         if (Input.GetButtonDown("Red"))
+        {
             nextTransform = ObjectColor.Red;
-
-		if (Input.GetButtonDown("Green"))
-            nextTransform = ObjectColor.Green;
-
-		if (Input.GetButtonDown("Blue"))
-            nextTransform = ObjectColor.Blue;
-
-		if (Input.GetButtonDown("Yellow"))
-            nextTransform = ObjectColor.Yellow;
-
-        if (nextTransform != objectColor)
             TransformCharge.instance.QueueColor(nextTransform);
-
+            SFX.QueueColor();
+        }
+        if (Input.GetButtonDown("Green"))
+        {
+            nextTransform = ObjectColor.Green;
+            TransformCharge.instance.QueueColor(nextTransform);
+            SFX.QueueColor();
+        }
+        if (Input.GetButtonDown("Blue"))
+        {
+            nextTransform = ObjectColor.Blue;
+            TransformCharge.instance.QueueColor(nextTransform);
+            SFX.QueueColor();
+        }
+        if (Input.GetButtonDown("Yellow"))
+        {
+            nextTransform = ObjectColor.Yellow;
+            TransformCharge.instance.QueueColor(nextTransform);
+            SFX.QueueColor();
+        }
+        
         if (BeatManager.instance.canTransform && nextTransform != objectColor)
         {
             ChangeShipColor(nextTransform);
@@ -76,6 +87,11 @@ public class BenShip : BenColored {
         if (Input.GetKeyDown(KeyCode.C))
         {
             RefillAmmo();
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Die();
         }
 
         float dist = 0;
@@ -156,7 +172,12 @@ public class BenShip : BenColored {
             return true;
         }
         else
+        {
+            SFX.NoAmmo();
+            AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.UpdateAmmo();
             return false;
+        }
     }
 
     public void PickUpAmmo(BenProjectile p)
@@ -270,6 +291,7 @@ public class BenShip : BenColored {
     {
         if (objectColor != color)
         {
+            SFX.Transform();
             DoTransformation(color);
             if (currentGun != null)
                 currentGun.enabled = false;
@@ -312,5 +334,24 @@ public class BenShip : BenColored {
     public void TakeDamage()
     {
 
+    }
+
+    public void Die()
+    {
+        BeatManager.instance.StartCoroutine(PlayerDeath());
+    }
+
+    IEnumerator PlayerDeath()
+    {
+        BenShip.instance.gameObject.SetActive(false);
+        ParticleSystem explosion = ((GameObject)Instantiate(Resources.Load("Explosion"))).GetComponent<ParticleSystem>();
+        explosion.transform.position = transform.position;
+        explosion.Play();
+        SFX.PlayerDeath();
+        
+        Destroy(explosion.gameObject, 8);
+        yield return new WaitForSeconds(3);
+        SFX.ReviveSnapshot();
+        BenShip.instance.gameObject.SetActive(true);
     }
 }
