@@ -293,6 +293,7 @@ public class BenShip : BenColored {
     {
         if (objectColor != color)
         {
+            
             SFX.Transform();
             DoTransformation(color);
             if (currentGun != null)
