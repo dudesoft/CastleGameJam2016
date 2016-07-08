@@ -7,10 +7,12 @@ public class AndiEnemyType2 : FreBaseEnemy
 
     public float speed = 2;
     private GameObject player;
+    private Rigidbody2D rigidbody;
     private bool engaging = true;
 
 	protected override void Init()
 	{
+        rigidbody = GetComponent<Rigidbody2D>();
         speed = speed * Random.Range(1, 1.5f);
         player = GameObject.FindGameObjectWithTag("Player");
 	}	
@@ -42,11 +44,20 @@ public class AndiEnemyType2 : FreBaseEnemy
         return (angle * (point - pivot) + pivot) + (pivot - point) * -Random.Range(3f, 5f);
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Wall")
+        {
+            engaging = true;
+            transform.Rotate(new Vector3(0, 0, 180));
+        }
+    }
+
     public virtual void Move()
     {
         TurnToTarget();
 
-        transform.position = transform.position + transform.right * speed * Time.deltaTime;
+        rigidbody.velocity = transform.right * speed;
 
         if (engaging && Vector3.Distance(transform.position, targetLocation) < 3)
         {
