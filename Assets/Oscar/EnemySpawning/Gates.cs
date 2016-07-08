@@ -43,13 +43,13 @@ public class Gates : MonoBehaviour {
         leftCollider = Left.GetComponent<BoxCollider2D>();
         rightCollider = Right.GetComponent<BoxCollider2D>();
         // Save left and right side starting positions
-        openTargetLeft = Left.localPosition;
-        openTargetRight = Right.localPosition;
+        openTargetLeft = Left.position;
+        openTargetRight = Right.position;
         // Calculate right and left close targets
-        closedTargetLeft = (Vector3)(Left.InverseTransformPoint(transform.TransformPoint(ClosedTarget))) - (leftCollider.bounds.size.x * Vector3.right / 2.0f);
-        closedTargetLeft += ClosedTarget;
-        closedTargetRight = (Vector3)(Right.InverseTransformPoint(transform.TransformPoint(ClosedTarget))) + (rightCollider.bounds.size.x * Vector3.right / 2.0f);
-        closedTargetRight += ClosedTarget;
+        closedTargetLeft = transform.TransformPoint(ClosedTarget) - (leftCollider.bounds.size.x * Vector3.right / 2.0f);
+        //closedTargetLeft += ClosedTarget;
+        closedTargetRight = transform.TransformPoint(ClosedTarget) + (rightCollider.bounds.size.x * Vector3.right / 2.0f);
+        //closedTargetRight += ClosedTarget;
         Debug.Log("Left " + closedTargetLeft + " Right " + closedTargetRight);
         state = GateState.Open;
        // Close();
@@ -67,8 +67,8 @@ public class Gates : MonoBehaviour {
     }
     private IEnumerator CloseAnim() {
         state = GateState.Midway;
-        float leftDist = Vector3.Distance(Left.localPosition, closedTargetLeft);
-        float rightDist = Vector3.Distance(Right.localPosition, closedTargetRight);
+        float leftDist = Vector3.Distance(Left.position, closedTargetLeft);
+        float rightDist = Vector3.Distance(Right.position, closedTargetRight);
         bool leftDone = leftDist < Time.deltaTime * Speed;
         bool rightDone = rightDist < Time.deltaTime * Speed;
 
@@ -79,21 +79,21 @@ public class Gates : MonoBehaviour {
         while (!leftDone || !rightDone) {
             // Move towards targets
             if(!leftDone) {
-                Left.localPosition += (leftDir * Speed * Time.deltaTime);
+                Left.position += (leftDir * Speed * Time.deltaTime);
             }
             if(!rightDone) {
-                Right.localPosition += (rightDir * Speed * Time.deltaTime);
+                Right.position += (rightDir * Speed * Time.deltaTime);
             }           
             // Update remaining distances
-            leftDist = Vector3.Distance(Left.localPosition, closedTargetLeft);
-            rightDist = Vector3.Distance(Right.localPosition, closedTargetRight);
+            leftDist = Vector3.Distance(Left.position, closedTargetLeft);
+            rightDist = Vector3.Distance(Right.position, closedTargetRight);
             leftDone = leftDist < Time.deltaTime * Speed;
             rightDone = rightDist < Time.deltaTime * Speed;
             yield return null;
         }
         // Ensure fully closed
-        Left.localPosition = closedTargetLeft;
-        Right.localPosition = closedTargetRight;
+        Left.position = closedTargetLeft;
+        Right.position = closedTargetRight;
         state = GateState.Closed;
     }
 
@@ -105,8 +105,8 @@ public class Gates : MonoBehaviour {
 
     private IEnumerator OpenAnim() {
         state = GateState.Midway;
-        float leftDist = Vector3.Distance(Left.localPosition, openTargetLeft);
-        float rightDist = Vector3.Distance(Right.localPosition, openTargetRight);
+        float leftDist = Vector3.Distance(Left.position, openTargetLeft);
+        float rightDist = Vector3.Distance(Right.position, openTargetRight);
         bool leftDone = leftDist < Time.deltaTime * Speed;
         bool rightDone = rightDist < Time.deltaTime * Speed;
 
@@ -117,21 +117,21 @@ public class Gates : MonoBehaviour {
         while (!leftDone || !rightDone) {
             // Move towards targets
             if (!leftDone) {
-                Left.localPosition += (leftDir * Speed * Time.deltaTime);
+                Left.position += (leftDir * Speed * Time.deltaTime);
             }
             if (!rightDone) {
-                Right.localPosition += (rightDir * Speed * Time.deltaTime);
+                Right.position += (rightDir * Speed * Time.deltaTime);
             }
             // Update remaining distances
-            leftDist = Vector3.Distance(Left.localPosition, openTargetLeft);
-            rightDist = Vector3.Distance(Right.localPosition, openTargetRight);
+            leftDist = Vector3.Distance(Left.position, openTargetLeft);
+            rightDist = Vector3.Distance(Right.position, openTargetRight);
             leftDone = leftDist < Time.deltaTime * Speed;
             rightDone = rightDist < Time.deltaTime * Speed;
             yield return null;
         }
         // Ensure fully open
-        Left.localPosition = openTargetLeft;
-        Right.localPosition = openTargetRight;
+        Left.position = openTargetLeft;
+        Right.position = openTargetRight;
         state = GateState.Open;
     }
 
