@@ -5,7 +5,7 @@ public class TransformCharge : MonoBehaviour
 {
     public Renderer r;
     Material mat;
-    public Color noQueueColor;
+    Color color = Color.white;
     public float scale = 1;
     public static TransformCharge instance;
     public float lowAlpha, highAlpha;
@@ -13,9 +13,10 @@ public class TransformCharge : MonoBehaviour
 
 	// Use this for initialization
 	void Awake () {
+        instance = this;
         mat = r.material;
-        mat.SetColor("_TintColor", noQueueColor);
-        c = noQueueColor;
+        mat.SetColor("_TintColor", color);
+        c = color;
 	}
     Color c;
 	// Update is called once per frame
@@ -23,24 +24,28 @@ public class TransformCharge : MonoBehaviour
         transform.localScale = Vector3.one * BeatManager.instance.TimeToNextTransform() * scale;
         if (BeatManager.instance.canTransform)
         {
-            mat.SetColor("_TintColor", noQueueColor);
+            //mat.SetColor("_TintColor", noQueueColor);
+            color = Color.white;
             queued = false;
         }
 
-        c = mat.GetColor("_TintColor");
+        c = color;
+        c.a = Mathf.Lerp(lowAlpha, highAlpha, BeatManager.instance.TimeToNextTransform() / (BeatManager.instance.beatDuration * 4));
+
         if (queued)
         {
-
+            
         }
         else
         {
-            c.a = Mathf.Lerp(lowAlpha, highAlpha, BeatManager.instance.TimeToNextTransform())/2;
+            c.a /= 2;
         }
-        mat.SetColor("_TintColor", noQueueColor);
+        mat.SetColor("_TintColor", c);
 	}
 
     public void QueueColor(ObjectColor color)
     {
         queued = true;
+        this.color = BenColored.GetRGB(color);
     }
 }

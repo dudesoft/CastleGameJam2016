@@ -65,6 +65,9 @@ public class BenShip : BenColored {
 		if (Input.GetButtonDown("Yellow"))
             nextTransform = ObjectColor.Yellow;
 
+        if (nextTransform != objectColor)
+            TransformCharge.instance.QueueColor(nextTransform);
+
         if (BeatManager.instance.canTransform && nextTransform != objectColor)
         {
             ChangeShipColor(nextTransform);
@@ -267,7 +270,6 @@ public class BenShip : BenColored {
     {
         if (objectColor != color)
         {
-            
             DoTransformation(color);
             if (currentGun != null)
                 currentGun.enabled = false;
