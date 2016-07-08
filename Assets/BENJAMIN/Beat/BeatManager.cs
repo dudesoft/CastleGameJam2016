@@ -55,7 +55,7 @@ public class BeatManager : MonoBehaviour {
         beating = true;
         StartCoroutine(UnBeat());
 
-        if (beat == 4)
+        if (beat == 1)
         {
             canTransform = true;
             StartCoroutine(UnTransform());
