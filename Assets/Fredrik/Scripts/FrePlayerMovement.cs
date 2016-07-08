@@ -131,11 +131,14 @@ public class FrePlayerMovement : MonoBehaviour {
 			moveVec.x = Input.GetAxisRaw("Horizontal");
 			moveVec.y = Input.GetAxisRaw("Vertical");
 
-			Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			aimVec.x = mousePos.x-transform.position.x ;
-			aimVec.y = mousePos.y-transform.position.y ;
-            lookDistance = Mathf.Clamp(Vector3.Distance(transform.position, aimVec), 0, maxLookDistance);
-            lookDistance = ((lookDistance / maxLookDistance) * (lookDistance / maxLookDistance)) * maxLookDistance;
+            if (Camera.main) {
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                aimVec.x = mousePos.x - transform.position.x;
+                aimVec.y = mousePos.y - transform.position.y;
+                lookDistance = Mathf.Clamp(Vector3.Distance(transform.position, aimVec), 0, maxLookDistance);
+                lookDistance = ((lookDistance / maxLookDistance) * (lookDistance / maxLookDistance)) * maxLookDistance;
+            }
+			
 			break;
 		}
 
