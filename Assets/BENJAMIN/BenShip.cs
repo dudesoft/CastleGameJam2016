@@ -32,9 +32,15 @@ public class BenShip : BenColored {
 
     public ShipConfiguration redShip, greenShip, blueShip, yellowShip;
 
+    public int TransformRedAmmoRefill;
+    public int TransformGreenAmmoRefill;
+    public int TransformBlueAmmoRefill;
+    public int TransformYellowAmmoRefill;
 
-	// Use this for initialization
-	void Start () {
+
+
+    // Use this for initialization
+    void Start () {
         
         currentGun = redGun;
         playerGO = gameObject;
@@ -311,7 +317,16 @@ public class BenShip : BenColored {
             base.ChangeColor(color);
             if (currentGun)
                 AmmoRing.instance.ChangeWeapon(currentGun);
+
+
+            // Refill ammo for other colors
+            redAmmo = Mathf.Min(color == ObjectColor.Red ? redAmmo : redAmmo + TransformRedAmmoRefill, maxRedAmmo);
+            greenAmmo = Mathf.Min(color == ObjectColor.Green ? greenAmmo : greenAmmo + TransformGreenAmmoRefill, maxGreenAmmo);
+            blueAmmo = Mathf.Min(color == ObjectColor.Blue ? blueAmmo : blueAmmo + TransformBlueAmmoRefill, maxBlueAmmo);
+            yellowAmmo = Mathf.Min(color == ObjectColor.Yellow ? yellowAmmo : yellowAmmo + TransformYellowAmmoRefill, maxYellowAmmo);
+            
             AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.UpdateAmmo();
             ButtonUI.instance.ChangeWeapon(currentGun.objectColor);
         }
     }

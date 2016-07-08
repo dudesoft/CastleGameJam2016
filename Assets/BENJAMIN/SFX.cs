@@ -52,6 +52,16 @@ public class SFX : MonoBehaviour {
         instance.effectedMixer.FindSnapshot("Alive").TransitionTo(1f);
     }
 
+    public static void Mute()
+    {
+        instance.effectedMixer.FindSnapshot("Mute").TransitionTo(1f);
+    }
+
+    public static void Unmute()
+    {
+        instance.effectedMixer.FindSnapshot("Alive").TransitionTo(1f);
+    }
+
     public static void EnemyDeath()
     {
         InAudio.Play(instance.gameObject, instance.enemyDeath);
