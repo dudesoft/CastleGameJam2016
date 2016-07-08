@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class BlinkToBeat : MonoBehaviour {
-    private UnityEngine.UI.Text text;
+    private UnityEngine.UI.Image image;
     private bool on = false;
 
     public Color OnColor;
@@ -11,7 +11,7 @@ public class BlinkToBeat : MonoBehaviour {
     public float LerpSpeed;
 
     void Start() {
-        text = GetComponent<UnityEngine.UI.Text>();
+        image = GetComponent<UnityEngine.UI.Image>();
     }
 	// Update is called once per frame
 	void Update () {
@@ -20,9 +20,9 @@ public class BlinkToBeat : MonoBehaviour {
         }
         if (on) {
             //text.color = Color.Lerp(text.color, OnColor, LerpSpeed * Time.deltaTime);
-            text.color = OnColor;
+            image.color = OnColor;
         } else {
-            text.color = Color.Lerp(text.color, OffColor, LerpSpeed * Time.deltaTime);
+            image.color = Color.Lerp(image.color, OffColor, LerpSpeed * Time.deltaTime);
         }
 	}
 }
