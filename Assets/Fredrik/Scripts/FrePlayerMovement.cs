@@ -129,9 +129,11 @@ public class FrePlayerMovement : MonoBehaviour {
         }
         else
 		{
-			
-			transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg),
-				Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg)));
+			if(moveVec != Vector2.zero)
+			{
+				transform.rotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg),
+					Time.deltaTime * rotateSpeed * Quaternion.Angle(transform.localRotation, Quaternion.Euler(0, 0, Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg)));
+			}
 			lookDirection = moveVec;
             lookDistance = 0;
 			isAiming = false;
