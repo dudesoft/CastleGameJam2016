@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -86,6 +87,11 @@ public class BenShip : BenColored {
         if (Input.GetKeyDown(KeyCode.C))
         {
             RefillAmmo();
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Die();
         }
 
         float dist = 0;
@@ -328,5 +334,24 @@ public class BenShip : BenColored {
     public void TakeDamage()
     {
 
+    }
+
+    public void Die()
+    {
+        BeatManager.instance.StartCoroutine(PlayerDeath());
+    }
+
+    IEnumerator PlayerDeath()
+    {
+        BenShip.instance.gameObject.SetActive(false);
+        ParticleSystem explosion = ((GameObject)Instantiate(Resources.Load("Explosion"))).GetComponent<ParticleSystem>();
+        explosion.transform.position = transform.position;
+        explosion.Play();
+        SFX.PlayerDeath();
+        
+        Destroy(explosion.gameObject, 8);
+        yield return new WaitForSeconds(3);
+        SFX.ReviveSnapshot();
+        BenShip.instance.gameObject.SetActive(true);
     }
 }
