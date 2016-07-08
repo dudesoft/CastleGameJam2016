@@ -159,9 +159,7 @@ public class BenShip : BenColored {
         {
             AmmoRing.instance.Pulse(1.05f, 0.1f);
             //Trigger UI update
-            AmmoRing.instance.UpdateAmmo();
-            ButtonUI.instance.UpdateAmmo();
-
+            
             switch (bp.objectColor)
             {
                 case ObjectColor.Red: redAmmo--; break;
@@ -169,6 +167,10 @@ public class BenShip : BenColored {
                 case ObjectColor.Blue: blueAmmo--; break;
                 case ObjectColor.Yellow: yellowAmmo--; break;
             }
+
+            AmmoRing.instance.UpdateAmmo();
+            ButtonUI.instance.UpdateAmmo();
+
             return true;
         }
         else
