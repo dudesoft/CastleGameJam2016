@@ -54,6 +54,8 @@ public class SceneLoader : MonoBehaviour {
             LoadStarted();
         }
         AsyncOperation asyncOp = SceneManager.LoadSceneAsync(NextSceneIndex, LoadSceneMode.Additive);
+        // Mute music 
+        SFX.Mute();
         // Wait to activate scene until transition animations are done
         asyncOp.allowSceneActivation = false;
         // Save reference to source scene main camera
@@ -74,6 +76,8 @@ public class SceneLoader : MonoBehaviour {
         asyncOp.allowSceneActivation = true;
         SceneToHide.SetActive(false);
         yield return null;
+        // Unmute music 
+        SFX.Unmute();
         // Trigger load end event
         if (LoadEnded != null) {
             LoadEnded();
