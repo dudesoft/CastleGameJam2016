@@ -67,8 +67,10 @@ public class FreBaseEnemy : BenColored {
 
 	void EnemyDies()
 	{
-
-		Died(this);
+        if (Died != null)
+        {
+            Died(this);
+        }
 	}
 
 	void UpdateColor()
