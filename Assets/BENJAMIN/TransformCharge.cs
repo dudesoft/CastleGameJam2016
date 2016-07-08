@@ -46,6 +46,13 @@ public class TransformCharge : MonoBehaviour
 
     public void QueueColor(ObjectColor color)
     {
+
+        if (!queued)
+        {
+            //if close add 10 styles, else remove 1
+            //also enemy deaths = 1 style
+        }
+
         queued = true;
         this.color = BenColored.GetRGB(color);
     }
