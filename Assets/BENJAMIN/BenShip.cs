@@ -384,7 +384,7 @@ public class BenShip : BenColored {
 
         SFX.Respawn();
         BenShip.instance.gameObject.SetActive(true);
-
+        canFire = true;
         yield return new WaitForSeconds(InvulnerableTime);
         invulnerable = false;
     }
