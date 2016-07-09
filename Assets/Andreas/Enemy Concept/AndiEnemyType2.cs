@@ -15,10 +15,13 @@ public class AndiEnemyType2 : FreBaseEnemy
         rigidbody = GetComponent<Rigidbody2D>();
         speed = speed * Random.Range(1, 1.5f);
         player = GameObject.FindGameObjectWithTag("Player");
+        
 	}	
 
     void Update()
     {
+        objectColor = GetComponent<BenProjectileSpawner>().objectColor;
+        gameObject.layer = LayerMask.NameToLayer(objectColor.ToString());
         Move();
     }
 
