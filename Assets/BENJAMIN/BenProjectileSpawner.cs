@@ -95,7 +95,12 @@ public class BenProjectileSpawner : BenColored {
                         BenProjectile p = pool.Get().GetComponent<BenProjectile>();//Instantiate(projectile);
 
                         if (!isPlayer)
-                            p.GetComponent<Renderer>().material.color = color;
+                        {
+                            p.objectColor = objectColor;
+                            //p.GetComponent<Renderer>().material.color = color;
+                            p.GetComponent<Renderer>().material.SetColor("_TintColor", BenColored.GetRGB(objectColor));
+                            p.gameObject.layer = LayerMask.NameToLayer(objectColor.ToString());
+                        }
                         transform.rotation = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
 
                         p.Init(transform.position + transform.right * fireDistance, transform.right, wait, angleOffset + angle + Random.Range(-randomSpread, randomSpread) * Random.Range(0, 1f), objectColor, this);
