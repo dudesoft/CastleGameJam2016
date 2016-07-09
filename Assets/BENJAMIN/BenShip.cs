@@ -355,7 +355,7 @@ public class BenShip : BenColored {
 		GetComponent<FrePlayerMovement>().DeadShake();
         BeatManager.instance.StartCoroutine(PlayerDeath());
         BenPlayerCamera.instance.ScreenShake(15, 2f);
-
+        Timer.Deaths++;
     }
 
     IEnumerator PlayerDeath()

@@ -41,6 +41,8 @@ public class Timer : MonoBehaviour
             mesh2.text = s;
         }
 
+        if (Input.GetKeyDown(KeyCode.P))
+            Complete();
 	}
 
     string TimeText(int ms, float s)
@@ -70,6 +72,13 @@ public class Timer : MonoBehaviour
         //Score screen stuff here
         Application.LoadLevelAdditive(2);
         //load score screen
-        ScoreScreen.instance.EnterScoreScreen(hours, minutes, seconds, milliseconds, (int)(time*1000), Deaths, Style);
+        StartCoroutine(WaitForScoreScreen());
+    }
+
+    IEnumerator WaitForScoreScreen()
+    {
+        yield return null;
+
+        ScoreScreen.instance.EnterScoreScreen(hours, minutes, seconds, milliseconds, (int)(time * 1000), Deaths, Style);
     }
 }
