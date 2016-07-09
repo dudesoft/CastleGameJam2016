@@ -2,7 +2,7 @@
 
 public class AndiStationaryEnemy : FreBaseEnemy
 {
-    public GameObject[] childParts;
+    public BenProjectileSpawner[] childParts;
     public GameObject centerObject;
     public float rotationSpeed;
     private Vector3 point;
@@ -30,27 +30,31 @@ public class AndiStationaryEnemy : FreBaseEnemy
         }
         centerObject.transform.Rotate(new Vector3(0, 0, -3));
 
-        foreach (GameObject child in childParts)
+        foreach (BenProjectileSpawner child in childParts)
         {
             if (objectColor == ObjectColor.Red)
             {
                 child.transform.RotateAround(transform.position, Vector3.forward, rotationSpeed);
                 child.GetComponent<SpriteRenderer>().color = new Color(1, cosine, cosine);
+                child.objectColor = objectColor;
             }
             else if (objectColor == ObjectColor.Blue)
             {
                 child.transform.RotateAround(transform.position, Vector3.forward, rotationSpeed);
                 child.GetComponent<SpriteRenderer>().color = new Color(cosine, cosine, 1);
+                child.objectColor = objectColor;
             }
             else if (objectColor == ObjectColor.Green)
             {
                 child.transform.RotateAround(transform.position, Vector3.forward, rotationSpeed);
                 child.GetComponent<SpriteRenderer>().color = new Color(cosine, 1, cosine);
+                child.objectColor = objectColor;
             }
             else if (objectColor == ObjectColor.Yellow)
             {
                 child.transform.RotateAround(transform.position, Vector3.forward, rotationSpeed);
                 child.GetComponent<SpriteRenderer>().color = new Color(0.7f, 0.7f, cosine);
+                child.objectColor = objectColor;
             }
         }
     }

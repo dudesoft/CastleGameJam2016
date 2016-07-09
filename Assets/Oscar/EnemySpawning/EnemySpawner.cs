@@ -98,6 +98,7 @@ public class EnemySpawner : MonoBehaviour {
         enemyExplosion.transform.position = enemy.transform.position;
         enemyExplosion.Emit(10);
         SFX.EnemyDeath();
+        Timer.Style += 1;
 
         // Unsubscribe from death event
         enemy.Died -= HandleDeadEnemy;

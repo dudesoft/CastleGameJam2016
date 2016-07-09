@@ -12,6 +12,8 @@ public class ScoreScreen : MonoBehaviour
     public Image bg;
     public static ScoreScreen instance;
 
+    public AmplifyBloom.AmplifyBloomEffect bloom; 
+
     int score;
     string grade;
 
@@ -19,8 +21,25 @@ public class ScoreScreen : MonoBehaviour
 	void Awake () 
     {
         instance = this;
+        bloomIntensity = bloom.OverallIntensity;
 	}
+
+    float bloomIntensity = 0.3f;
+    public float bloomLowIntensity = 0.1f;
 	
+    void Update()
+    {
+        if (BeatManager.instance.beating)
+        {
+            bloom.OverallIntensity = bloomIntensity;
+            LeanTween.value(bloom.gameObject, bloom.OverallIntensity, bloomLowIntensity, 0.2f).setOnUpdate(
+            (float val) =>
+            {
+                bloom.OverallIntensity = val;
+            });
+        }
+    }
+
 	public void EnterScoreScreen(int hours, int minutes, int seconds, int ms, int totalms, int deaths, int styles)
     {
         score = (int)(30000 - ((totalms / 25f) + (deaths * 1000))) + (styles * 100);
@@ -33,23 +52,26 @@ public class ScoreScreen : MonoBehaviour
     IEnumerator ScoreMenuRoutine(int hours, int minutes, int seconds, int ms, int totalms, int deaths, int styles)
     {
         LeanTween.color(bg.GetComponent<RectTransform>(), Color.black, 1);
-
+        BenShip.instance.gameObject.SetActive(false);
         while (!BeatManager.instance.canTransform)
             yield return null;
 
         timeScore.text = (hours > 0 ? (hours + ":") : "") + minutes + ":" + seconds + ":" + ms;
+        SFX.Transform();
         yield return null;
         
         while (!BeatManager.instance.canTransform)
             yield return null;
         
         deathScore.text = deaths + "";
+        SFX.Transform();
         yield return null;
 
         while (!BeatManager.instance.canTransform)
             yield return null;
         
         styleScore.text = styles + "";
+        SFX.Transform();
         yield return null;
 
         while (!BeatManager.instance.canTransform)
@@ -73,11 +95,14 @@ public class ScoreScreen : MonoBehaviour
         while (!BeatManager.instance.canTransform)
             yield return null;
         scoreText.text = score + "";
+        SFX.Transform();
         yield return null;
 
         while (!BeatManager.instance.canTransform)
             yield return null;
         gradeScore.text = grade;
+        SFX.Transform();
+        SFX.Respawn();
 
         yield return new WaitForSeconds(12);
 
