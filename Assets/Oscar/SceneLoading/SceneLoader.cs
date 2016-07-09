@@ -99,6 +99,7 @@ public class SceneLoader : MonoBehaviour {
             yield return null;
         }
         SceneManager.UnloadScene(CurrentSceneIndex);
+        SceneManager.LoadScene(3, LoadSceneMode.Additive);
     }
     //private IEnumerator LoadSceneAsync() {
     //    // Trigger load end event
