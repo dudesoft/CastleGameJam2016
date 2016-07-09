@@ -113,7 +113,7 @@ public class ScoreScreen : MonoBehaviour
     {
         for (int i = 0; i < scoreLimits.Count; i++)
         {
-            if (score < scoreLimits[i])
+            if (score > scoreLimits[i])
             {
                 return rewardName[i];
             }
